@@ -74,6 +74,7 @@ public class Dabble
         double[] scoreInput = new double[numberOfScores];
         for (int i = 0; i < numberOfScores; i++)
         {
+            System.out.print("Score: ");
             scoreInput[i] = input.nextDouble();
         }
         return scoreInput;
