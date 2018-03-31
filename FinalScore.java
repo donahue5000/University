@@ -6,7 +6,7 @@
 
 //import java.util.Scanner;
 //
-//public class Dabble
+//public class FinalScore
 //{
 //    public static void main(String[] args)
 //    {
