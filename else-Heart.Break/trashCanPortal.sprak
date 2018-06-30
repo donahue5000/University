@@ -1,0 +1,3 @@
+#send trash can things to the hotel room
+
+MoveToRoom("Hotel_Room1")

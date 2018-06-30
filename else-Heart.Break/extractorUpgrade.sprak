@@ -1,0 +1,5 @@
+#copy extractor result to clipboard
+
+string name = GetName()
+Say(name)
+CopyToClipboard(name)

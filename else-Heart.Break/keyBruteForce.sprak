@@ -1,0 +1,7 @@
+#applied to key. for locks above 10000 use doorPortal for quicker access.
+
+loop x from 0 to 10000
+    if Toggle(x)
+        break
+    end
+end

@@ -1,0 +1,7 @@
+#applied to drinkables
+#attributes: Sleepiness, Smelliness, Drunkenness, Corruption, Charisma, Speed
+
+var a = Connect("Cafe_Room1_Poor_WaterTap_Poor_WaterTap_3")
+a.SetLiquidAmount(1537)
+Sleepiness(-100)
+Smelliness(-100)
