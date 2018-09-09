@@ -1,5 +1,0 @@
-#comment out unlocked door destination and replace with locked door destination, no need to wait 
-#for brute force key to iterate.
-
-#Goto("NiniApartment_DoorToPlaza")
-Goto("MonadsApartment_DoorToPlaza")
