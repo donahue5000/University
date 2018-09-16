@@ -11,7 +11,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="MainScreen" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.MainScreenController">
+<BorderPane fx:id="mainScreenScene" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="750.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.MainScreenController">
    <top>
       <Label text="Inventory Management System" BorderPane.alignment="BOTTOM_CENTER">
          <BorderPane.margin>
@@ -23,7 +23,7 @@
       </Label>
    </top>
    <bottom>
-      <Button fx:id="Exit" mnemonicParsing="false" onAction="#Exit" text="Exit" textAlignment="CENTER" BorderPane.alignment="BOTTOM_RIGHT">
+      <Button mnemonicParsing="false" onAction="#exitButtonClick" text="Exit" textAlignment="CENTER" BorderPane.alignment="BOTTOM_RIGHT">
          <font>
             <Font name="Consolas Bold" size="14.0" />
          </font>
@@ -37,15 +37,15 @@
          <bottom>
             <HBox alignment="CENTER" prefHeight="100.0" spacing="20.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="PartAdd" mnemonicParsing="false" text="Add">
+                  <Button mnemonicParsing="false" onAction="#addPartButtonClick" text="Add">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font></Button>
-                  <Button fx:id="PartModify" mnemonicParsing="false" text="Modifiy">
+                  <Button mnemonicParsing="false" onAction="#modifyPartButtonClick" text="Modifiy">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font></Button>
-                  <Button fx:id="PartDelete" mnemonicParsing="false" text="Delete">
+                  <Button mnemonicParsing="false" onAction="#deletePartButtonClick" text="Delete">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font></Button>
@@ -65,14 +65,14 @@
                   </Label>
                </left>
                <right>
-                  <TextField fx:id="PartSeachField" BorderPane.alignment="CENTER_RIGHT">
+                  <TextField BorderPane.alignment="CENTER_RIGHT">
                      <BorderPane.margin>
                         <Insets />
                      </BorderPane.margin>
                   </TextField>
                </right>
                <center>
-                  <Button fx:id="PartSearch" mnemonicParsing="false" text="Search" BorderPane.alignment="CENTER_RIGHT">
+                  <Button mnemonicParsing="false" onAction="#partSearchButtonClick" text="Search" BorderPane.alignment="CENTER_RIGHT">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font>
@@ -82,7 +82,7 @@
                   </Button>
                </center>
                <bottom>
-                  <Button fx:id="ClearPartSearch" mnemonicParsing="false" text="Clear" BorderPane.alignment="CENTER_RIGHT">
+                  <Button mnemonicParsing="false" onAction="#clearPartSearchButtonClick" text="Clear" BorderPane.alignment="CENTER_RIGHT">
                      <BorderPane.margin>
                         <Insets top="10.0" />
                      </BorderPane.margin>
@@ -97,12 +97,12 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>
          <right>
-            <TableView fx:id="PartTable" BorderPane.alignment="CENTER">
+            <TableView BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Part ID" />
                 <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Part Name" />
                   <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Inventory Level" />
-                  <TableColumn editable="false" maxWidth="120.0" minWidth="100.0" prefWidth="120.0" text="Price/Cost per Unit" />
+                  <TableColumn editable="false" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Price/Cost per Unit" />
               </columns>
                <BorderPane.margin>
                   <Insets />
@@ -116,15 +116,15 @@
          <bottom>
             <HBox alignment="CENTER" prefHeight="100.0" spacing="20.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="ProductAdd" mnemonicParsing="false" text="Add">
+                  <Button mnemonicParsing="false" onAction="#addProductButtonClick" text="Add">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font></Button>
-                  <Button fx:id="ProductModify" mnemonicParsing="false" text="Modifiy">
+                  <Button mnemonicParsing="false" onAction="#modifyProductButtonClick" text="Modifiy">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font></Button>
-                  <Button fx:id="ProductDelete" mnemonicParsing="false" text="Delete">
+                  <Button mnemonicParsing="false" onAction="#deleteProductButtonClick" text="Delete">
                      <font>
                         <Font name="Consolas" size="12.0" />
                      </font></Button>
@@ -144,14 +144,14 @@
                   </Label>
                </left>
                <right>
-                  <TextField fx:id="ProductSearchField" BorderPane.alignment="CENTER_RIGHT">
+                  <TextField BorderPane.alignment="CENTER_RIGHT">
                      <BorderPane.margin>
                         <Insets />
                      </BorderPane.margin>
                   </TextField>
                </right>
                <center>
-                  <Button fx:id="ProductSearch" mnemonicParsing="false" text="Search" BorderPane.alignment="CENTER_RIGHT">
+                  <Button mnemonicParsing="false" onAction="#productSearchButtonClick" text="Search" BorderPane.alignment="CENTER_RIGHT">
                      <BorderPane.margin>
                         <Insets right="20.0" />
                      </BorderPane.margin>
@@ -161,7 +161,7 @@
                   </Button>
                </center>
                <bottom>
-                  <Button fx:id="ClearProductSearch" mnemonicParsing="false" text="Clear" BorderPane.alignment="CENTER_RIGHT">
+                  <Button mnemonicParsing="false" onAction="#clearProductButtonClick" text="Clear" BorderPane.alignment="CENTER_RIGHT">
                      <BorderPane.margin>
                         <Insets top="10.0" />
                      </BorderPane.margin>
@@ -176,12 +176,12 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>
          <left>
-            <TableView fx:id="ProductTable" BorderPane.alignment="CENTER">
+            <TableView BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Product ID" />
                 <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Product Name" />
                   <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Inventory Level" />
-                  <TableColumn editable="false" maxWidth="120.0" minWidth="100.0" prefWidth="120.0" text="Price per Unit" />
+                  <TableColumn editable="false" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Price per Unit" />
               </columns>
                <BorderPane.margin>
                   <Insets />

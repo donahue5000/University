@@ -10,7 +10,16 @@ import javafx.stage.Stage;
  *
  * @author Brian Donahue
  */
+
+
+
+
+
 public class InventoryManager extends Application {
+    
+    
+    
+    
     
     @Override
     public void start(Stage stage) throws Exception {
