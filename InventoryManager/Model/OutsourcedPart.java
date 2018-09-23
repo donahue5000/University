@@ -17,11 +17,11 @@ public class OutsourcedPart extends Part{
     
     
     
-    public void setMachineID(String newCompanyName){
+    public void setCompanyName(String newCompanyName){
         companyName.set(newCompanyName);
     }
     
-    public String getMachineID(){
+    public String getCompanyName(){
         return companyName.get();
     }
     

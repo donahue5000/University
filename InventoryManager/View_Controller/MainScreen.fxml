@@ -13,7 +13,7 @@
 
 <BorderPane fx:id="mainScreenScene" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="750.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.MainScreenController">
    <top>
-      <Label text="Inventory Management System" BorderPane.alignment="BOTTOM_CENTER">
+      <Label focusTraversable="false" text="Inventory Management System" BorderPane.alignment="BOTTOM_CENTER">
          <BorderPane.margin>
             <Insets bottom="20.0" top="20.0" />
          </BorderPane.margin>
@@ -23,7 +23,7 @@
       </Label>
    </top>
    <bottom>
-      <Button mnemonicParsing="false" onAction="#exitButtonClick" text="Exit" textAlignment="CENTER" BorderPane.alignment="BOTTOM_RIGHT">
+      <Button cancelButton="true" mnemonicParsing="false" onAction="#exitButtonClick" text="Exit" textAlignment="CENTER" BorderPane.alignment="BOTTOM_RIGHT">
          <font>
             <Font name="Consolas Bold" size="14.0" />
          </font>
@@ -55,7 +55,7 @@
          <top>
             <BorderPane BorderPane.alignment="CENTER">
                <left>
-                  <Label text="Parts" BorderPane.alignment="CENTER">
+                  <Label focusTraversable="false" text="Parts" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
                         <Insets left="30.0" />
                      </BorderPane.margin>
@@ -97,12 +97,12 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>
          <right>
-            <TableView BorderPane.alignment="CENTER">
+            <TableView fx:id="partsTable" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Part ID" />
-                <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Part Name" />
-                  <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Inventory Level" />
-                  <TableColumn editable="false" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Price/Cost per Unit" />
+                <TableColumn fx:id="partIDcolumn" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Part ID" />
+                <TableColumn fx:id="partNameColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Part Name" />
+                  <TableColumn fx:id="partInStockColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Inventory Level" />
+                  <TableColumn fx:id="partPriceColumn" editable="false" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Price/Cost per Unit" />
               </columns>
                <BorderPane.margin>
                   <Insets />
@@ -134,7 +134,7 @@
          <top>
             <BorderPane BorderPane.alignment="CENTER">
                <left>
-                  <Label text="Products" BorderPane.alignment="CENTER">
+                  <Label focusTraversable="false" text="Products" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
                         <Insets left="30.0" />
                      </BorderPane.margin>
@@ -176,12 +176,12 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>
          <left>
-            <TableView BorderPane.alignment="CENTER">
+            <TableView fx:id="productsTable" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Product ID" />
-                <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Product Name" />
-                  <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Inventory Level" />
-                  <TableColumn editable="false" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Price per Unit" />
+                <TableColumn fx:id="productIDcolumn" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Product ID" />
+                <TableColumn fx:id="productNameColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Product Name" />
+                  <TableColumn fx:id="productInStockColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Inventory Level" />
+                  <TableColumn fx:id="productPriceColumn" editable="false" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Price per Unit" />
               </columns>
                <BorderPane.margin>
                   <Insets />

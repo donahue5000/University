@@ -1,6 +1,5 @@
 package Model;
 
-import java.util.ArrayList;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -20,8 +19,10 @@ public class Product {
     private final IntegerProperty min;
     private final IntegerProperty max;
 
-    public Product(int newProductID, String newName, double newPrice, 
-            int newInStock, int newMin, int newMax) {
+    public Product(ObservableList<Part> newAssociatedParts, int newProductID, 
+            String newName, double newPrice, int newInStock, int newMin, 
+            int newMax) {
+        associatedParts = newAssociatedParts;
         productID = new SimpleIntegerProperty(newProductID);
         name = new SimpleStringProperty(newName);
         price = new SimpleDoubleProperty(newPrice);
@@ -35,7 +36,7 @@ public class Product {
     
     
     public void setName(String newName){
-        name.setValue(newName);
+        name.set(newName);
     }
     
     public String getName(){
@@ -75,7 +76,7 @@ public class Product {
     }
     
     public void addAssociatedPart(Part newPart){
-        
+        associatedParts.add(newPart);
     }
     
     public boolean removeAssociatedPart(Part removedPart){
@@ -90,6 +91,14 @@ public class Product {
         return foundPart;
     }
     
+    public ObservableList<Part> getAssociatedParts(){
+        return associatedParts;
+    }
+    
+    public void setAssociatedParts(ObservableList newAssociatedParts){
+        associatedParts = newAssociatedParts;
+    }
+    
     public void setProductID(int newProductID){
         productID.set(newProductID);
     }
@@ -98,7 +107,29 @@ public class Product {
         return productID.get();
     }
     
+    public IntegerProperty productIDProperty(){
+        return productID;
+    }
     
+    public StringProperty nameProperty(){
+        return name;
+    }
+    
+    public DoubleProperty priceProperty(){
+        return price;
+    }
+    
+    public IntegerProperty inStockProperty(){
+        return inStock;
+    }
+    
+    public IntegerProperty minProperty(){
+        return min;
+    }
+    
+    public IntegerProperty maxProperty(){
+        return max;
+    }
     
 }
 

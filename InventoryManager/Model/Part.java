@@ -78,6 +78,31 @@ public abstract class Part {
     public int getPartID(){
         return partID.get();
     }
+    
+    public IntegerProperty partIDProperty(){
+        return partID;
+    }
+    
+    public StringProperty nameProperty(){
+        return name;
+    }
+    
+    public DoubleProperty priceProperty(){
+        return price;
+    }
+    
+    public IntegerProperty inStockProperty(){
+        return inStock;
+    }
+    
+    public IntegerProperty minProperty(){
+        return min;
+    }
+    
+    public IntegerProperty maxProperty(){
+        return max;
+    }
+
 }
 
 

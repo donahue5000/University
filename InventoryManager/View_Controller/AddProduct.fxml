@@ -10,69 +10,69 @@
 
 <AnchorPane id="AnchorPane" fx:id="addProductScene" prefHeight="750.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.AddProductController">
    <children>
-      <Label layoutX="40.0" layoutY="100.0" text="ID">
+      <TextField fx:id="productID" disable="true" editable="false" focusTraversable="false" layoutX="90.0" layoutY="96.0" prefWidth="100.0" />
+      <TextField fx:id="name" layoutX="90.0" layoutY="136.0" prefWidth="100.0" />
+      <TextField fx:id="inStock" layoutX="90.0" layoutY="176.0" prefWidth="100.0" />
+      <TextField fx:id="price" layoutX="90.0" layoutY="216.0" prefWidth="100.0" />
+      <TextField fx:id="max" layoutX="90.0" layoutY="256.0" prefWidth="100.0" />
+      <TextField fx:id="min" layoutX="260.0" layoutY="256.0" prefWidth="100.0" />
+      <TextField layoutX="586.0" layoutY="39.0" prefWidth="100.0" />
+      <Button layoutX="509.0" layoutY="39.0" mnemonicParsing="false" onAction="#searchPartButtonClick" prefWidth="60.0" text="Search" />
+      <TableView fx:id="partsTable" layoutX="435.0" layoutY="101.0" prefHeight="200.0">
+        <columns>
+          <TableColumn fx:id="partIDcolumn" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Part ID" />
+          <TableColumn fx:id="partNameColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Part Name" />
+            <TableColumn fx:id="partInStockColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Inventory Level" />
+            <TableColumn fx:id="partPriceColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Price per Unit" />
+        </columns>
+      </TableView>
+      <Button layoutX="747.0" layoutY="314.0" mnemonicParsing="false" onAction="#addPartButtonClick" prefWidth="60.0" text="Add" />
+      <TableView fx:id="addPartsTable" layoutX="435.0" layoutY="366.0" prefHeight="200.0">
+         <columns>
+            <TableColumn fx:id="addPartIDcolumn" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Part ID" />
+            <TableColumn fx:id="addPartNameColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Part Name" />
+            <TableColumn fx:id="addPartInStockColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Inventory Level" />
+            <TableColumn fx:id="addPartPriceColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Price per Unit" />
+         </columns>
+      </TableView>
+      <Button layoutX="747.0" layoutY="576.0" mnemonicParsing="false" onAction="#deletePartButtonClick" prefWidth="60.0" text="Delete" />
+      <Button defaultButton="true" layoutX="660.0" layoutY="636.0" mnemonicParsing="false" onAction="#saveButtonClick" prefWidth="60.0" text="Save" />
+      <Button cancelButton="true" layoutX="747.0" layoutY="636.0" mnemonicParsing="false" onAction="#cancelButtonClick" prefWidth="60.0" text="Cancel" />
+      <Label focusTraversable="false" layoutX="40.0" layoutY="100.0" text="ID">
          <font>
             <Font name="Consolas" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="60.0" layoutY="40.0" text="Add Product">
+      <Label focusTraversable="false" layoutX="40.0" layoutY="140.0" text="Name">
+         <font>
+            <Font name="Consolas" size="14.0" />
+         </font>
+      </Label>
+      <Label focusTraversable="false" layoutX="40.0" layoutY="180.0" text="Inv">
+         <font>
+            <Font name="Consolas" size="14.0" />
+         </font>
+      </Label>
+      <Label focusTraversable="false" layoutX="40.0" layoutY="220.0" text="Price">
+         <font>
+            <Font name="Consolas" size="14.0" />
+         </font>
+      </Label>
+      <Label focusTraversable="false" layoutX="40.0" layoutY="260.0" text="Max">
+         <font>
+            <Font name="Consolas" size="14.0" />
+         </font>
+      </Label>
+      <Label focusTraversable="false" layoutX="210.0" layoutY="260.0" text="Min">
+         <font>
+            <Font name="Consolas" size="14.0" />
+         </font>
+      </Label>
+      <Label focusTraversable="false" layoutX="60.0" layoutY="40.0" text="Add Product">
          <font>
             <Font name="Consolas Bold" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="40.0" layoutY="140.0" text="Name">
-         <font>
-            <Font name="Consolas" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="40.0" layoutY="180.0" text="Inv">
-         <font>
-            <Font name="Consolas" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="40.0" layoutY="220.0" text="Price">
-         <font>
-            <Font name="Consolas" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="40.0" layoutY="260.0" text="Max">
-         <font>
-            <Font name="Consolas" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="210.0" layoutY="260.0" text="Min">
-         <font>
-            <Font name="Consolas" size="14.0" />
-         </font>
-      </Label>
-      <TextField layoutX="90.0" layoutY="96.0" prefWidth="100.0" />
-      <TextField layoutX="90.0" layoutY="136.0" prefWidth="100.0" />
-      <TextField layoutX="90.0" layoutY="176.0" prefWidth="100.0" />
-      <TextField layoutX="90.0" layoutY="216.0" prefWidth="100.0" />
-      <TextField layoutX="90.0" layoutY="256.0" prefWidth="100.0" />
-      <TextField layoutX="260.0" layoutY="256.0" prefWidth="100.0" />
-      <Button layoutX="509.0" layoutY="39.0" mnemonicParsing="false" onAction="#searchPartButtonClick" prefWidth="60.0" text="Search" />
-      <Button layoutX="747.0" layoutY="576.0" mnemonicParsing="false" onAction="#deletePartButtonClick" prefWidth="60.0" text="Delete" />
-      <Button layoutX="747.0" layoutY="636.0" mnemonicParsing="false" onAction="#cancelButtonClick" prefWidth="60.0" text="Cancel" />
-      <Button layoutX="660.0" layoutY="636.0" mnemonicParsing="false" onAction="#saveButtonClick" prefWidth="60.0" text="Save" />
-      <TextField layoutX="586.0" layoutY="39.0" prefWidth="100.0" />
-      <Button layoutX="747.0" layoutY="314.0" mnemonicParsing="false" onAction="#addPartButtonClick" prefWidth="60.0" text="Add" />
-      <TableView layoutX="435.0" layoutY="101.0" prefHeight="200.0">
-        <columns>
-          <TableColumn maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Part ID" />
-          <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Part Name" />
-            <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Inventory Level" />
-            <TableColumn maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Price per Unit" />
-        </columns>
-      </TableView>
-      <TableView layoutX="435.0" layoutY="366.0" prefHeight="200.0">
-         <columns>
-            <TableColumn maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Part ID" />
-            <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Part Name" />
-            <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Inventory Level" />
-            <TableColumn maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Price per Unit" />
-         </columns>
-      </TableView>
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

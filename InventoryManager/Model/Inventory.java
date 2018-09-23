@@ -1,20 +1,25 @@
 package Model;
 
-import java.util.ArrayList;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 
 public class Inventory {
     
-    private static ObservableList<Product> products;
-    private static ObservableList<Part> allParts;
+    private static ObservableList<Product> products = 
+            FXCollections.observableArrayList();
+    private static ObservableList<Part> allParts = 
+            FXCollections.observableArrayList();
+    private static int partIDtracker = 1;
+    private static int ProductIDtracker = 1;
 
     
     
     
     
     public static void addProduct(Product product){
-        
+        products.add(product);
+        ProductIDtracker++;
     }
     
     public static boolean removeProduct(int productID){
@@ -34,7 +39,8 @@ public class Inventory {
     }
     
     public static void addPart(Part part){
-        
+        allParts.add(part);
+        partIDtracker++;
     }
     
     public static boolean deletePart(Part part){
@@ -53,6 +59,20 @@ public class Inventory {
         
     }
     
+    public static ObservableList<Part> getAllParts(){
+        return allParts;
+    }
     
+    public static ObservableList<Product> getProducts(){
+        return products;
+    }
+    
+    public static int getPartID(){
+        return partIDtracker;
+    }
+    
+    public static int getProductID(){
+        return ProductIDtracker;
+    }
     
 }

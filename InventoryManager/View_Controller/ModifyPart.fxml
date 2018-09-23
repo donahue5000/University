@@ -14,7 +14,7 @@
          <children>
             <HBox alignment="CENTER">
                <children>
-                  <Label text="Modify Part">
+                  <Label focusTraversable="false" text="Modify Part">
                      <font>
                         <Font name="Consolas Bold" size="18.0" />
                      </font>
@@ -22,12 +22,15 @@
                         <Insets right="20.0" />
                      </HBox.margin>
                   </Label>
-                  <RadioButton mnemonicParsing="false" text="In-House">
+                  <RadioButton fx:id="inHouseSelected" disable="true" focusTraversable="false" mnemonicParsing="false" text="In-House">
                      <HBox.margin>
                         <Insets left="20.0" right="20.0" />
                      </HBox.margin>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="modifyPartToggle" />
+                     </toggleGroup>
                   </RadioButton>
-                  <RadioButton mnemonicParsing="false" text="Outsourced">
+                  <RadioButton fx:id="outsourcedSelected" disable="true" focusTraversable="false" mnemonicParsing="false" text="Outsourced" toggleGroup="$modifyPartToggle">
                      <HBox.margin>
                         <Insets left="20.0" right="20.0" />
                      </HBox.margin>
@@ -39,39 +42,39 @@
             </HBox>
             <HBox alignment="CENTER">
                <children>
-                  <VBox alignment="CENTER_LEFT" spacing="20.0">
+                  <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="20.0">
                      <children>
-                        <Label prefHeight="25.0" text="ID">
+                        <Label focusTraversable="false" prefHeight="25.0" text="ID">
                            <font>
                               <Font name="Consolas Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="25.0" text="Name">
+                        <Label focusTraversable="false" prefHeight="25.0" text="Name">
                            <font>
                               <Font name="Consolas Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="25.0" text="Inv">
+                        <Label focusTraversable="false" prefHeight="25.0" text="Inv">
                            <font>
                               <Font name="Consolas Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="25.0" text="Price/Cost">
+                        <Label focusTraversable="false" prefHeight="25.0" text="Price/Cost">
                            <font>
                               <Font name="Consolas Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="25.0" text="Max">
+                        <Label focusTraversable="false" prefHeight="25.0" text="Max">
                            <font>
                               <Font name="Consolas Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label text="Min">
+                        <Label focusTraversable="false" prefHeight="25.0" text="Min">
                            <font>
                               <Font name="Consolas Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="25.0" text="Machine ID">
+                        <Label fx:id="machineIDcompanyNameLabel" focusTraversable="false" prefHeight="25.0" text="Machine ID">
                            <font>
                               <Font name="Consolas Bold" size="14.0" />
                            </font>
@@ -83,21 +86,21 @@
                   </VBox>
                   <VBox alignment="CENTER_LEFT" spacing="20.0">
                      <children>
-                        <TextField prefWidth="100.0" />
-                        <TextField prefWidth="100.0" />
-                        <TextField prefWidth="100.0" />
-                        <TextField prefWidth="100.0" />
-                        <TextField prefWidth="100.0" />
-                        <TextField prefWidth="100.0" />
-                        <TextField prefWidth="100.0" />
+                        <TextField fx:id="partID" disable="true" editable="false" focusTraversable="false" prefHeight="25.0" prefWidth="100.0" />
+                        <TextField fx:id="name" prefHeight="25.0" prefWidth="100.0" />
+                        <TextField fx:id="inStock" prefHeight="25.0" prefWidth="100.0" />
+                        <TextField fx:id="price" prefHeight="25.0" prefWidth="100.0" />
+                        <TextField fx:id="max" prefHeight="25.0" prefWidth="100.0" />
+                        <TextField fx:id="min" prefHeight="25.0" prefWidth="100.0" />
+                        <TextField fx:id="machineIDcompanyName" prefHeight="25.0" prefWidth="100.0" />
                      </children>
                   </VBox>
                </children>
             </HBox>
             <HBox alignment="CENTER" spacing="30.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#savePartButtonClick" prefWidth="60.0" text="Save" />
-                  <Button mnemonicParsing="false" onAction="#cancelButtonClick" prefWidth="60.0" text="Cancel" />
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#savePartButtonClick" prefWidth="60.0" text="Save" />
+                  <Button cancelButton="true" mnemonicParsing="false" onAction="#cancelButtonClick" prefWidth="60.0" text="Cancel" />
                </children>
                <padding>
                   <Insets bottom="20.0" top="20.0" />
