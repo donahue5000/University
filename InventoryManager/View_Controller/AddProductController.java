@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -54,6 +55,8 @@ public class AddProductController implements Initializable {
     private TableColumn<Part, Integer> addPartInStockColumn;
     @FXML
     private TableColumn<Part, Double> addPartPriceColumn;
+    @FXML
+    private TextField partSearch;
     
     private ObservableList<Part> associatedParts;
     private int productIDnew;
@@ -75,16 +78,41 @@ public class AddProductController implements Initializable {
 
     @FXML
     private void searchPartButtonClick(ActionEvent event) {
+        if (partSearch.getText().trim().equals("")){
+            Alert empty = new Alert(Alert.AlertType.ERROR);
+            empty.setTitle("Error");
+            empty.setContentText("Search Field Empty");
+            empty.showAndWait();
+            return;
+        }
+        Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
+                .getText()));
+        if (searchedPart != null){
+            partsTable.getSelectionModel().select(searchedPart);
+            partsTable.scrollTo(searchedPart);
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("ID " + partSearch.getText() + " Not Found");
+            alert.showAndWait();
+        }
     }
 
     @FXML
     private void deletePartButtonClick(ActionEvent event) {
+        if (addPartsTable.getSelectionModel().getSelectedItem() != null){
+        associatedParts.remove(addPartsTable.getSelectionModel().getSelectedItem());
+        }
     }
 
     @FXML
     private void cancelButtonClick(ActionEvent event) throws IOException {
-        //todo confirmation
-        InventoryManager.toMain();
+        //confirm Product discard
+        Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        cancelAlert.setTitle("Cancel");
+        cancelAlert.setContentText("Product Not Saved");
+        cancelAlert.showAndWait();
+        if (cancelAlert.getResult() == ButtonType.OK) InventoryManager.toMain();
     }
 
     @FXML
@@ -112,7 +140,9 @@ public class AddProductController implements Initializable {
 
     @FXML
     private void addPartButtonClick(ActionEvent event) {
+        if (partsTable.getSelectionModel().getSelectedItem() != null){
         associatedParts.add(partsTable.getSelectionModel().getSelectedItem());
+        }
     }
     
     private void loadPartTable(){

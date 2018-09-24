@@ -1,5 +1,8 @@
 package View_Controller;
 
+//todo    newDataValidityExceptions
+//todo    formatPrice  partScreenLayout  modifyableInhouseOutsourced
+
 import Model.*;
 import java.io.IOException;
 import java.net.URL;
@@ -13,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -41,6 +45,10 @@ public class MainScreenController implements Initializable {
     private TableColumn<Product, Integer> productInStockColumn;
     @FXML
     private TableColumn<Product, Double> productPriceColumn;
+    @FXML
+    private TextField partSearch;
+    @FXML
+    private TextField productSearch;
     
     //references for passing Parts to modify screens
     private static Part modifiedPart;
@@ -97,22 +105,69 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void clearPartSearchButtonClick(ActionEvent event) {
+        partSearch.setText("");
+        partsTable.getSelectionModel().clearSelection();
     }
 
     @FXML
     private void partSearchButtonClick(ActionEvent event) {
+        if (partSearch.getText().trim().equals("")){
+            Alert empty = new Alert(Alert.AlertType.ERROR);
+            empty.setTitle("Error");
+            empty.setContentText("Search Field Empty");
+            empty.showAndWait();
+            return;
+        }
+        Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
+                .getText()));
+        if (searchedPart != null){
+            partsTable.getSelectionModel().select(searchedPart);
+            partsTable.scrollTo(searchedPart);
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("ID " + partSearch.getText() + " Not Found");
+            alert.showAndWait();
+        }
     }
 
     @FXML
     private void deletePartButtonClick(ActionEvent event) {
+        if (partsTable.getSelectionModel().getSelectedItem() == null){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("oh snap");
+            alert.setContentText("Select a part to delete");
+            alert.showAndWait();
+        }else Inventory.deletePart(partsTable.getSelectionModel()
+                .getSelectedItem());
     }
 
     @FXML
     private void clearProductButtonClick(ActionEvent event) {
+        productSearch.setText("");
+        productsTable.getSelectionModel().clearSelection();
     }
 
     @FXML
     private void productSearchButtonClick(ActionEvent event) {
+        if (productSearch.getText().trim().equals("")){
+            Alert empty = new Alert(Alert.AlertType.ERROR);
+            empty.setTitle("Error");
+            empty.setContentText("Search Field Empty");
+            empty.showAndWait();
+            return;
+        }
+        Product searchedProduct = Inventory.lookupProduct(Integer.
+                parseInt(productSearch.getText()));
+        if (searchedProduct != null){
+            productsTable.getSelectionModel().select(searchedProduct);
+            productsTable.scrollTo(searchedProduct);
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("ID " + productSearch.getText() + " Not Found");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -152,6 +207,13 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void deleteProductButtonClick(ActionEvent event) {
+        if (productsTable.getSelectionModel().getSelectedItem() == null){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("oh snap");
+            alert.setContentText("Select a product to delete");
+            alert.showAndWait();
+        }else Inventory.removeProduct(productsTable.getSelectionModel()
+                .getSelectedItem().getProductID());
     }
     
     private void loadTables(){

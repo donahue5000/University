@@ -57,6 +57,8 @@ public class ModifyProductController implements Initializable {
     private TableColumn<Part, Integer> addPartInStockColumn;
     @FXML
     private TableColumn<Part, Double> addPartPriceColumn;
+    @FXML
+    private TextField partSearch;
     
     private Product product;
     private ObservableList<Part> tempPartsList;
@@ -84,15 +86,36 @@ public class ModifyProductController implements Initializable {
 
     @FXML
     private void searchPartButtonClick(ActionEvent event) {
+        if (partSearch.getText().trim().equals("")){
+            Alert empty = new Alert(Alert.AlertType.ERROR);
+            empty.setTitle("Error");
+            empty.setContentText("Search Field Empty");
+            empty.showAndWait();
+            return;
+        }
+        Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
+                .getText()));
+        if (searchedPart != null){
+            partsTable.getSelectionModel().select(searchedPart);
+            partsTable.scrollTo(searchedPart);
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("ID " + partSearch.getText() + " Not Found");
+            alert.showAndWait();
+        }
     }
 
     @FXML
     private void deletePartButtonClick(ActionEvent event) {
+        if (addPartsTable.getSelectionModel().getSelectedItem() != null){
+        tempPartsList.remove(addPartsTable.getSelectionModel().getSelectedItem());
+        }
     }
 
     @FXML
     private void cancelButtonClick(ActionEvent event) throws IOException {
-        //confirm Product discard
+        //confirm changes discard
         Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
         cancelAlert.setTitle("Cancel");
         cancelAlert.setContentText("Product Changes Not Saved");
@@ -124,8 +147,10 @@ public class ModifyProductController implements Initializable {
 
     @FXML
     private void addPartButtonClick(ActionEvent event) {
+        if (partsTable.getSelectionModel().getSelectedItem() != null){
         tempPartsList.add(partsTable.getSelectionModel()
             .getSelectedItem());
+        }
     }
     
     private void loadPartTable(){

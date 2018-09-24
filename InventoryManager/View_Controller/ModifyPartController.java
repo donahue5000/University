@@ -83,7 +83,7 @@ public class ModifyPartController implements Initializable {
 
     @FXML
     private void cancelButtonClick(ActionEvent event) throws IOException {
-        //confirm Part discard
+        //confirm changes discard
         Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
         cancelAlert.setTitle("Cancel");
         cancelAlert.setContentText("Part Changes Not Saved");
