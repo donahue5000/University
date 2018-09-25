@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -138,7 +139,7 @@ public class ModifyProductController implements Initializable {
             //alert dialog for textfield format problems
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("oh snap");
-            alert.setContentText("Data Format Problem");
+            alert.setContentText("Text Entered in Number Field");
             alert.showAndWait();
             return;
         }
@@ -159,6 +160,17 @@ public class ModifyProductController implements Initializable {
         partNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInStockColumn.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         partPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        partPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>(){
+            @Override
+            public void updateItem(Double price, boolean empty){
+                super.updateItem(price, empty);
+                if (empty){
+                    setText(null);
+                }else{
+                    setText(String.format("$%.2f", price));
+                }
+            }
+        });
         partsTable.getColumns().setAll(partIDcolumn, partNameColumn, 
                 partInStockColumn, partPriceColumn);
     }
@@ -169,6 +181,17 @@ public class ModifyProductController implements Initializable {
         addPartNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         addPartInStockColumn.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         addPartPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        addPartPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>(){
+            @Override
+            public void updateItem(Double price, boolean empty){
+                super.updateItem(price, empty);
+                if (empty){
+                    setText(null);
+                }else{
+                    setText(String.format("$%.2f", price));
+                }
+            }
+        });
         addPartsTable.getColumns().setAll(addPartIDcolumn, addPartNameColumn, 
                 addPartInStockColumn, addPartPriceColumn);
     }

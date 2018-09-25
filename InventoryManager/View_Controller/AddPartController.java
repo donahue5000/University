@@ -73,7 +73,9 @@ public class AddPartController implements Initializable {
                 int machineID = Integer.parseInt(machineIDcompanyNameString);
                 Part part = new InhousePart(partIDNew, nameNew, priceNew,
                         inStockNew, minNew, maxNew, machineID);
-                Inventory.addPart(part);
+                if (Inventory.partCheck(part)){
+                    Inventory.addPart(part);
+                }else return;
             }
             if (outsourcedSelected.isSelected()) {
                 Part part = new OutsourcedPart(partIDNew, nameNew, priceNew,
@@ -83,7 +85,7 @@ public class AddPartController implements Initializable {
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("oh snap");
-            alert.setContentText("Data Format Problem");
+            alert.setContentText("Text Entered in Number Field");
             alert.showAndWait();
             return;
         }

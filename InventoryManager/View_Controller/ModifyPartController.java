@@ -48,8 +48,7 @@ public class ModifyPartController implements Initializable {
     
     //references to modified objects
     private Part part;
-    private InhousePart inhousePart;
-    private OutsourcedPart outsourcedPart;
+    private Part newPart;
     
 
     @Override
@@ -67,7 +66,7 @@ public class ModifyPartController implements Initializable {
         if (part instanceof InhousePart){
             inHouseSelected.setSelected(true);
             machineIDcompanyNameLabel.setText("Machine ID");
-            inhousePart = (InhousePart) part;
+            InhousePart inhousePart = (InhousePart) part;
             machineIDcompanyName.setText(
                     Integer.toString(inhousePart.getMachineID()));
         }
@@ -76,7 +75,7 @@ public class ModifyPartController implements Initializable {
         if (part instanceof OutsourcedPart){
             outsourcedSelected.setSelected(true);
             machineIDcompanyNameLabel.setText("Company Name");
-            outsourcedPart = (OutsourcedPart) part;
+            OutsourcedPart outsourcedPart = (OutsourcedPart) part;
             machineIDcompanyName.setText(outsourcedPart.getCompanyName());
         }
     }    
@@ -93,31 +92,42 @@ public class ModifyPartController implements Initializable {
 
     @FXML
     private void savePartButtonClick(ActionEvent event) {
-        //check textfield format and update Part
         try {
-            part.setName(name.getText());
-            part.setPrice(Double.parseDouble(price.getText()));
-            part.setInStock(Integer.parseInt(inStock.getText()));
-            part.setMin(Integer.parseInt(min.getText()));
-            part.setMax(Integer.parseInt(max.getText()));
-            //use downcasted reference to update MachineID
+            int newPartID = Integer.parseInt(partID.getText());
+            String newName = name.getText();
+            double newPrice = Double.parseDouble(price.getText());
+            int newInStock = Integer.parseInt(inStock.getText());
+            int newMin = Integer.parseInt(min.getText());
+            int newMax = Integer.parseInt(max.getText());
             if (inHouseSelected.isSelected()) {
-                inhousePart.setMachineID(Integer.parseInt(machineIDcompanyName
-                        .getText()));
+                int newMachineID = Integer.parseInt(machineIDcompanyName.getText());
+                newPart = new InhousePart(newPartID, newName, newPrice
+                        , newInStock, newMin, newMax, newMachineID);
             }
-            //use downcasted reference to update CompanyName
             if (outsourcedSelected.isSelected()) {
-                outsourcedPart.setCompanyName(machineIDcompanyName.getText());
+                String newCompanyName = machineIDcompanyName.getText();
+                newPart = new OutsourcedPart(newPartID, newName, newPrice
+                        , newInStock, newMin, newMax, newCompanyName);
             }
+            Inventory.replacePart(part, newPart);
         } catch (NumberFormatException e) {
             //alert dialog for textfield format problems
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("oh snap");
-            alert.setContentText("Data Format Problem");
+            alert.setContentText("Text Entered in Number Field");
             alert.showAndWait();
             return;
         }
         InventoryManager.toMain();
     }
 
+    @FXML
+    private void inHouseToggleSelect(ActionEvent event) {
+        machineIDcompanyNameLabel.setText("Machine ID");
+    }
+
+    @FXML
+    private void outsourcedToggleSelect(ActionEvent event) {
+        machineIDcompanyNameLabel.setText("Company Name");
+    }
 }

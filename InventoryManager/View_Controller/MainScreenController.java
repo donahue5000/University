@@ -1,7 +1,7 @@
 package View_Controller;
 
-//todo    newDataValidityExceptions
-//todo    formatPrice  partScreenLayout  modifyableInhouseOutsourced
+//todo    newDataValidityExceptions centralizeAlerts javadocs
+//todo    partScreenLayout
 
 import Model.*;
 import java.io.IOException;
@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -223,6 +224,17 @@ public class MainScreenController implements Initializable {
         partNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInStockColumn.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         partPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        partPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>(){
+            @Override
+            public void updateItem(Double price, boolean empty){
+                super.updateItem(price, empty);
+                if (empty){
+                    setText(null);
+                }else{
+                    setText(String.format("$%.2f", price));
+                }
+            }
+        });
         partsTable.getColumns().setAll(partIDcolumn, partNameColumn, 
                 partInStockColumn, partPriceColumn);
 
@@ -232,6 +244,17 @@ public class MainScreenController implements Initializable {
         productNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         productInStockColumn.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        productPriceColumn.setCellFactory(cell -> new TableCell<Product, Double>(){
+            @Override
+            public void updateItem(Double price, boolean empty){
+                super.updateItem(price, empty);
+                if (empty){
+                    setText(null);
+                }else{
+                    setText(String.format("$%.2f", price));
+                }
+            }
+        });
         productsTable.getColumns().setAll(productIDcolumn, productNameColumn, 
                 productInStockColumn, productPriceColumn);
     }
