@@ -18,7 +18,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 
-
 public class ModifyPartController implements Initializable {
 
     @FXML
@@ -45,11 +44,10 @@ public class ModifyPartController implements Initializable {
     private RadioButton inHouseSelected;
     @FXML
     private RadioButton outsourcedSelected;
-    
+
     //references to modified objects
     private Part part;
     private Part newPart;
-    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -61,33 +59,30 @@ public class ModifyPartController implements Initializable {
         price.setText(Double.toString(part.getPrice()));
         max.setText(Integer.toString(part.getMax()));
         min.setText(Integer.toString(part.getMin()));
-        
+
         //configure screen for InhousePart and downcast for MachineID access
-        if (part instanceof InhousePart){
+        if (part instanceof InhousePart) {
             inHouseSelected.setSelected(true);
             machineIDcompanyNameLabel.setText("Machine ID");
             InhousePart inhousePart = (InhousePart) part;
             machineIDcompanyName.setText(
                     Integer.toString(inhousePart.getMachineID()));
         }
-        
+
         //configure screen for OutsourcedPart and downcast for CompanyName access
-        if (part instanceof OutsourcedPart){
+        if (part instanceof OutsourcedPart) {
             outsourcedSelected.setSelected(true);
             machineIDcompanyNameLabel.setText("Company Name");
             OutsourcedPart outsourcedPart = (OutsourcedPart) part;
             machineIDcompanyName.setText(outsourcedPart.getCompanyName());
         }
-    }    
+    }
 
     @FXML
     private void cancelButtonClick(ActionEvent event) throws IOException {
-        //confirm changes discard
-        Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        cancelAlert.setTitle("Cancel");
-        cancelAlert.setContentText("Part Changes Not Saved");
-        cancelAlert.showAndWait();
-        if (cancelAlert.getResult() == ButtonType.OK) InventoryManager.toMain();
+        if (Inventory.alertCancel() == ButtonType.OK) {
+            InventoryManager.toMain();
+        }
     }
 
     @FXML
@@ -101,21 +96,19 @@ public class ModifyPartController implements Initializable {
             int newMax = Integer.parseInt(max.getText());
             if (inHouseSelected.isSelected()) {
                 int newMachineID = Integer.parseInt(machineIDcompanyName.getText());
-                newPart = new InhousePart(newPartID, newName, newPrice
-                        , newInStock, newMin, newMax, newMachineID);
+                newPart = new InhousePart(newPartID, newName, newPrice,
+                         newInStock, newMin, newMax, newMachineID);
             }
             if (outsourcedSelected.isSelected()) {
                 String newCompanyName = machineIDcompanyName.getText();
-                newPart = new OutsourcedPart(newPartID, newName, newPrice
-                        , newInStock, newMin, newMax, newCompanyName);
+                newPart = new OutsourcedPart(newPartID, newName, newPrice,
+                         newInStock, newMin, newMax, newCompanyName);
             }
-            Inventory.replacePart(part, newPart);
+            if (Inventory.partCheck(newPart)) {
+                Inventory.replacePart(part, newPart);
+            }else return;
         } catch (NumberFormatException e) {
-            //alert dialog for textfield format problems
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("oh snap");
-            alert.setContentText("Text Entered in Number Field");
-            alert.showAndWait();
+            Inventory.alertFormat();
             return;
         }
         InventoryManager.toMain();

@@ -51,12 +51,9 @@ public class AddPartController implements Initializable {
 
     @FXML
     private void cancelButtonClick(ActionEvent event) {
-        //confirm Part discard
-        Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        cancelAlert.setTitle("Cancel");
-        cancelAlert.setContentText("Part Not Saved");
-        cancelAlert.showAndWait();
-        if (cancelAlert.getResult() == ButtonType.OK) InventoryManager.toMain();
+        if (Inventory.alertCancel() == ButtonType.OK) {
+            InventoryManager.toMain();
+        }
     }
 
     @FXML
@@ -73,20 +70,23 @@ public class AddPartController implements Initializable {
                 int machineID = Integer.parseInt(machineIDcompanyNameString);
                 Part part = new InhousePart(partIDNew, nameNew, priceNew,
                         inStockNew, minNew, maxNew, machineID);
-                if (Inventory.partCheck(part)){
+                if (Inventory.partCheck(part)) {
                     Inventory.addPart(part);
-                }else return;
+                } else {
+                    return;
+                }
             }
             if (outsourcedSelected.isSelected()) {
                 Part part = new OutsourcedPart(partIDNew, nameNew, priceNew,
                         inStockNew, minNew, maxNew, machineIDcompanyNameString);
-                Inventory.addPart(part);
+                if (Inventory.partCheck(part)) {
+                    Inventory.addPart(part);
+                } else {
+                    return;
+                }
             }
         } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("oh snap");
-            alert.setContentText("Text Entered in Number Field");
-            alert.showAndWait();
+            Inventory.alertFormat();
             return;
         }
         InventoryManager.toMain();
@@ -101,7 +101,5 @@ public class AddPartController implements Initializable {
     private void outsourcedToggleSelect(ActionEvent event) {
         machineIDcompanyNameLabel.setText("Company Name");
     }
-
-
 
 }

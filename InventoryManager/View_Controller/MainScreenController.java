@@ -1,8 +1,7 @@
 package View_Controller;
 
-//todo    newDataValidityExceptions centralizeAlerts javadocs
+//todo    productPriceCheck javadocs
 //todo    partScreenLayout
-
 import Model.*;
 import java.io.IOException;
 import java.net.URL;
@@ -50,7 +49,7 @@ public class MainScreenController implements Initializable {
     private TextField partSearch;
     @FXML
     private TextField productSearch;
-    
+
     //references for passing Parts to modify screens
     private static Part modifiedPart;
     private static Product modifiedProduct;
@@ -83,17 +82,17 @@ public class MainScreenController implements Initializable {
     @FXML
     private void modifyPartButtonClick(ActionEvent event) throws IOException {
         //ensure Part table item is selected
-        if (partsTable.getSelectionModel().getSelectedItem() == null){
+        if (partsTable.getSelectionModel().getSelectedItem() == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("oh snap");
             alert.setContentText("Select a part to modify");
             alert.showAndWait();
             return;
         }
-        
+
         //store selected Part reference
         modifiedPart = partsTable.getSelectionModel().getSelectedItem();
-        
+
         //load modify Part screen
         Parent loader = FXMLLoader.load(getClass()
                 .getResource("ModifyPart.fxml"));
@@ -112,19 +111,16 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void partSearchButtonClick(ActionEvent event) {
-        if (partSearch.getText().trim().equals("")){
-            Alert empty = new Alert(Alert.AlertType.ERROR);
-            empty.setTitle("Error");
-            empty.setContentText("Search Field Empty");
-            empty.showAndWait();
+        if (partSearch.getText().trim().equals("")) {
+            Inventory.alertSearchEmpty();
             return;
         }
         Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
                 .getText()));
-        if (searchedPart != null){
+        if (searchedPart != null) {
             partsTable.getSelectionModel().select(searchedPart);
             partsTable.scrollTo(searchedPart);
-        }else{
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText("ID " + partSearch.getText() + " Not Found");
@@ -134,13 +130,15 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void deletePartButtonClick(ActionEvent event) {
-        if (partsTable.getSelectionModel().getSelectedItem() == null){
+        if (partsTable.getSelectionModel().getSelectedItem() == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("oh snap");
             alert.setContentText("Select a part to delete");
             alert.showAndWait();
-        }else Inventory.deletePart(partsTable.getSelectionModel()
-                .getSelectedItem());
+        } else {
+            Inventory.deletePart(partsTable.getSelectionModel()
+                    .getSelectedItem());
+        }
     }
 
     @FXML
@@ -151,19 +149,16 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void productSearchButtonClick(ActionEvent event) {
-        if (productSearch.getText().trim().equals("")){
-            Alert empty = new Alert(Alert.AlertType.ERROR);
-            empty.setTitle("Error");
-            empty.setContentText("Search Field Empty");
-            empty.showAndWait();
+        if (productSearch.getText().trim().equals("")) {
+            Inventory.alertSearchEmpty();
             return;
         }
         Product searchedProduct = Inventory.lookupProduct(Integer.
                 parseInt(productSearch.getText()));
-        if (searchedProduct != null){
+        if (searchedProduct != null) {
             productsTable.getSelectionModel().select(searchedProduct);
             productsTable.scrollTo(searchedProduct);
-        }else{
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText("ID " + productSearch.getText() + " Not Found");
@@ -186,7 +181,7 @@ public class MainScreenController implements Initializable {
     @FXML
     private void modifyProductButtonClick(ActionEvent event) throws IOException {
         //ensure Product table item is selected
-        if (productsTable.getSelectionModel().getSelectedItem() == null){
+        if (productsTable.getSelectionModel().getSelectedItem() == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("oh snap");
             alert.setContentText("Select a product to modify");
@@ -195,7 +190,7 @@ public class MainScreenController implements Initializable {
         }
         //store selected Product reference
         modifiedProduct = productsTable.getSelectionModel().getSelectedItem();
-        
+
         //load modify Product screen
         Parent loader = FXMLLoader.load(getClass()
                 .getResource("ModifyProduct.fxml"));
@@ -208,34 +203,39 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void deleteProductButtonClick(ActionEvent event) {
-        if (productsTable.getSelectionModel().getSelectedItem() == null){
+        Product productToDelete = productsTable.getSelectionModel()
+                .getSelectedItem();
+        if (productToDelete == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("oh snap");
             alert.setContentText("Select a product to delete");
             alert.showAndWait();
-        }else Inventory.removeProduct(productsTable.getSelectionModel()
-                .getSelectedItem().getProductID());
+        } else if (productToDelete.getAssociatedParts().size() > 1) {
+            Inventory.alertDeleteProductWithParts();
+        } else {
+            Inventory.removeProduct(productToDelete.getProductID());
+        }
     }
-    
-    private void loadTables(){
+
+    private void loadTables() {
         //populate Part table
         partsTable.setItems(Inventory.getAllParts());
         partIDcolumn.setCellValueFactory(new PropertyValueFactory<>("partID"));
         partNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInStockColumn.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         partPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        partPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>(){
+        partPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>() {
             @Override
-            public void updateItem(Double price, boolean empty){
+            public void updateItem(Double price, boolean empty) {
                 super.updateItem(price, empty);
-                if (empty){
+                if (empty) {
                     setText(null);
-                }else{
-                    setText(String.format("$%.2f", price));
+                } else {
+                    setText(String.format("$%,.2f", price));
                 }
             }
         });
-        partsTable.getColumns().setAll(partIDcolumn, partNameColumn, 
+        partsTable.getColumns().setAll(partIDcolumn, partNameColumn,
                 partInStockColumn, partPriceColumn);
 
         //populate Product table
@@ -244,26 +244,27 @@ public class MainScreenController implements Initializable {
         productNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         productInStockColumn.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        productPriceColumn.setCellFactory(cell -> new TableCell<Product, Double>(){
+        productPriceColumn.setCellFactory(cell -> new TableCell<Product, Double>() {
             @Override
-            public void updateItem(Double price, boolean empty){
+            public void updateItem(Double price, boolean empty) {
                 super.updateItem(price, empty);
-                if (empty){
+                if (empty) {
                     setText(null);
-                }else{
-                    setText(String.format("$%.2f", price));
+                } else {
+                    setText(String.format("$%,.2f", price));
                 }
             }
         });
-        productsTable.getColumns().setAll(productIDcolumn, productNameColumn, 
+        productsTable.getColumns().setAll(productIDcolumn, productNameColumn,
                 productInStockColumn, productPriceColumn);
     }
-    
+
     //Part reference getters for modify screens
-    public static Part getModifiedPart(){
+    public static Part getModifiedPart() {
         return modifiedPart;
     }
-    public static Product getModifiedProduct(){
+
+    public static Product getModifiedProduct() {
         return modifiedProduct;
     }
 

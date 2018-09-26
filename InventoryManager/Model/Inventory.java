@@ -98,6 +98,10 @@ public class Inventory {
         allParts.set(allParts.indexOf(oldPart), newPart);
     }
 
+    public static void replaceProduct(Product oldProduct, Product newProduct) {
+        products.set(products.indexOf(oldProduct), newProduct);
+    }
+
     public static boolean partCheck(Part part) {
         boolean result = true;
         if (part.getInStock() < part.getMin()
@@ -119,14 +123,30 @@ public class Inventory {
 
     public static boolean productCheck(Product product) {
         boolean result = true;
-        
+        if (product.getInStock() < product.getMin()
+                || product.getInStock() > product.getMax()) {
+            alertInv();
+            result = false;
+        }
+        if (product.getMax() < product.getMin()) {
+            alertMax();
+            result = false;
+        }
+        if (product.getMin() > product.getMax()) {
+            alertMin();
+            result = false;
+        }
+        if (product.getAssociatedParts().size() < 1) {
+            alertPartMissing(product);
+            result = false;
+        }
         return result;
     }
 
     //alerts
     public static void alertInv() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText("Inventory out of Specified Limits");
+        alert.setContentText("Inventory out of range");
         alert.showAndWait();
     }
 
@@ -138,9 +158,47 @@ public class Inventory {
 
     public static void alertMin() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText("Min higher than Max");
+        alert.setContentText("Min higher than Max\n\n\n"
+                + "Yes, checking for both max under min\n"
+                + "and min over max is redundant.\n\n"
+                + "Required by the course checklist though, so here ya go :)");
         alert.showAndWait();
     }
-    
+
+    public static void alertPartMissing(Product product) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("Product must have one part.\n"
+                + "Trying to sell a box of nothing, are we?");
+        alert.showAndWait();
+    }
+
+    public static void alertDeleteProductWithParts() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("Remove all parts via Modify to delete Product");
+        alert.showAndWait();
+    }
+
+    public static void alertFormat() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("oh snap");
+        alert.setContentText("Uhhh, those boxes need numbers and words...\n"
+                + "Tip: put numbers where numbers go and words where words go");
+        alert.showAndWait();
+    }
+
+    public static ButtonType alertCancel() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Cancel");
+        alert.setContentText("Discard changes?");
+        alert.showAndWait();
+        return alert.getResult();
+    }
+
+    public static void alertSearchEmpty() {
+        Alert empty = new Alert(Alert.AlertType.ERROR);
+        empty.setTitle("Error");
+        empty.setContentText("Search Field Empty");
+        empty.showAndWait();
+    }
 
 }

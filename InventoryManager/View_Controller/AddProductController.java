@@ -19,7 +19,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
-
 public class AddProductController implements Initializable {
 
     @FXML
@@ -58,40 +57,35 @@ public class AddProductController implements Initializable {
     private TableColumn<Part, Double> addPartPriceColumn;
     @FXML
     private TextField partSearch;
-    
+
     private ObservableList<Part> associatedParts;
     private int productIDnew;
-
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         associatedParts = FXCollections.observableArrayList();
         loadPartTable();
         loadAddPartTable();
-        
+
         //get next Product ID
         productIDnew = Inventory.getProductID();
-        
+
         productID.setText("Auto Gen: " + Integer.toString(productIDnew));
-        
-    }    
-    
+
+    }
 
     @FXML
     private void searchPartButtonClick(ActionEvent event) {
-        if (partSearch.getText().trim().equals("")){
-            Alert empty = new Alert(Alert.AlertType.ERROR);
-            empty.setTitle("Error");
-            empty.setContentText("Search Field Empty");
-            empty.showAndWait();
+        if (partSearch.getText().trim().equals("")) {
+            Inventory.alertSearchEmpty();
             return;
         }
         Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
                 .getText()));
-        if (searchedPart != null){
+        if (searchedPart != null) {
             partsTable.getSelectionModel().select(searchedPart);
             partsTable.scrollTo(searchedPart);
-        }else{
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText("ID " + partSearch.getText() + " Not Found");
@@ -101,39 +95,35 @@ public class AddProductController implements Initializable {
 
     @FXML
     private void deletePartButtonClick(ActionEvent event) {
-        if (addPartsTable.getSelectionModel().getSelectedItem() != null){
-        associatedParts.remove(addPartsTable.getSelectionModel().getSelectedItem());
+        if (addPartsTable.getSelectionModel().getSelectedItem() != null) {
+            associatedParts.remove(addPartsTable.getSelectionModel().getSelectedItem());
         }
     }
 
     @FXML
     private void cancelButtonClick(ActionEvent event) throws IOException {
-        //confirm Product discard
-        Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        cancelAlert.setTitle("Cancel");
-        cancelAlert.setContentText("Product Not Saved");
-        cancelAlert.showAndWait();
-        if (cancelAlert.getResult() == ButtonType.OK) InventoryManager.toMain();
+        if (Inventory.alertCancel() == ButtonType.OK) {
+            InventoryManager.toMain();
+        }
     }
 
     @FXML
     private void saveButtonClick(ActionEvent event) {
         try {
             String nameNew = name.getText();
-            int inStockNew = Integer.parseInt(inStock.getText());
             double priceNew = Double.parseDouble(price.getText());
-            int maxNew = Integer.parseInt(max.getText());
+            int inStockNew = Integer.parseInt(inStock.getText());
             int minNew = Integer.parseInt(min.getText());
-            Product product = new Product(associatedParts, productIDnew, 
+            int maxNew = Integer.parseInt(max.getText());
+            Product product = new Product(associatedParts, productIDnew,
                     nameNew, priceNew, inStockNew, minNew, maxNew);
+            if (Inventory.productCheck(product)) {
                 Inventory.addProduct(product);
-
-             
+            } else {
+                return;
+            }
         } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("oh snap");
-            alert.setContentText("Text Entered in Number Field");
-            alert.showAndWait();
+            Inventory.alertFormat();
             return;
         }
         InventoryManager.toMain();
@@ -141,51 +131,51 @@ public class AddProductController implements Initializable {
 
     @FXML
     private void addPartButtonClick(ActionEvent event) {
-        if (partsTable.getSelectionModel().getSelectedItem() != null){
-        associatedParts.add(partsTable.getSelectionModel().getSelectedItem());
+        if (partsTable.getSelectionModel().getSelectedItem() != null) {
+            associatedParts.add(partsTable.getSelectionModel().getSelectedItem());
         }
     }
-    
-    private void loadPartTable(){
+
+    private void loadPartTable() {
         partsTable.setItems(Inventory.getAllParts());
         partIDcolumn.setCellValueFactory(new PropertyValueFactory<>("partID"));
         partNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInStockColumn.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         partPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        partPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>(){
+        partPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>() {
             @Override
-            public void updateItem(Double price, boolean empty){
+            public void updateItem(Double price, boolean empty) {
                 super.updateItem(price, empty);
-                if (empty){
+                if (empty) {
                     setText(null);
-                }else{
-                    setText(String.format("$%.2f", price));
+                } else {
+                    setText(String.format("$%,.2f", price));
                 }
             }
         });
-        partsTable.getColumns().setAll(partIDcolumn, partNameColumn, 
+        partsTable.getColumns().setAll(partIDcolumn, partNameColumn,
                 partInStockColumn, partPriceColumn);
     }
-    
-    private void loadAddPartTable(){
+
+    private void loadAddPartTable() {
         addPartsTable.setItems(associatedParts);
         addPartIDcolumn.setCellValueFactory(new PropertyValueFactory<>("partID"));
         addPartNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         addPartInStockColumn.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         addPartPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        addPartPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>(){
+        addPartPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>() {
             @Override
-            public void updateItem(Double price, boolean empty){
+            public void updateItem(Double price, boolean empty) {
                 super.updateItem(price, empty);
-                if (empty){
+                if (empty) {
                     setText(null);
-                }else{
-                    setText(String.format("$%.2f", price));
+                } else {
+                    setText(String.format("$%,.2f", price));
                 }
             }
         });
-        addPartsTable.getColumns().setAll(addPartIDcolumn, addPartNameColumn, 
+        addPartsTable.getColumns().setAll(addPartIDcolumn, addPartNameColumn,
                 addPartInStockColumn, addPartPriceColumn);
     }
-    
+
 }

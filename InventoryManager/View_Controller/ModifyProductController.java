@@ -21,7 +21,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
-
 public class ModifyProductController implements Initializable {
 
     @FXML
@@ -60,10 +59,10 @@ public class ModifyProductController implements Initializable {
     private TableColumn<Part, Double> addPartPriceColumn;
     @FXML
     private TextField partSearch;
-    
-    private Product product;
-    private ObservableList<Part> tempPartsList;
 
+    private Product product;
+    private Product newProduct;
+    private ObservableList<Part> tempPartsList;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -75,31 +74,28 @@ public class ModifyProductController implements Initializable {
         price.setText(Double.toString(product.getPrice()));
         max.setText(Integer.toString(product.getMax()));
         min.setText(Integer.toString(product.getMin()));
-        
+
         //copy associatedParts to temp Part list for modifying pre-save
         tempPartsList = FXCollections.observableArrayList();
         product.getAssociatedParts().forEach(part -> tempPartsList.add(part));
-        
+
         //initialize tables
         loadPartTable();
         loadAddPartTable();
-    }    
+    }
 
     @FXML
     private void searchPartButtonClick(ActionEvent event) {
-        if (partSearch.getText().trim().equals("")){
-            Alert empty = new Alert(Alert.AlertType.ERROR);
-            empty.setTitle("Error");
-            empty.setContentText("Search Field Empty");
-            empty.showAndWait();
+        if (partSearch.getText().trim().equals("")) {
+            Inventory.alertSearchEmpty();
             return;
         }
         Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
                 .getText()));
-        if (searchedPart != null){
+        if (searchedPart != null) {
             partsTable.getSelectionModel().select(searchedPart);
             partsTable.scrollTo(searchedPart);
-        }else{
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText("ID " + partSearch.getText() + " Not Found");
@@ -109,38 +105,48 @@ public class ModifyProductController implements Initializable {
 
     @FXML
     private void deletePartButtonClick(ActionEvent event) {
-        if (addPartsTable.getSelectionModel().getSelectedItem() != null){
-        tempPartsList.remove(addPartsTable.getSelectionModel().getSelectedItem());
+        if (addPartsTable.getSelectionModel().getSelectedItem() != null) {
+            tempPartsList.remove(addPartsTable.getSelectionModel().getSelectedItem());
         }
     }
 
     @FXML
     private void cancelButtonClick(ActionEvent event) throws IOException {
-        //confirm changes discard
-        Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        cancelAlert.setTitle("Cancel");
-        cancelAlert.setContentText("Product Changes Not Saved");
-        cancelAlert.showAndWait();
-        if (cancelAlert.getResult() == ButtonType.OK) InventoryManager.toMain();
+        if (Inventory.alertCancel() == ButtonType.OK) {
+            InventoryManager.toMain();
+        }
     }
 
     @FXML
     private void saveButtonClick(ActionEvent event) {
-        //check textfield format and update Part
         try {
-            product.setName(name.getText());
-            product.setPrice(Double.parseDouble(price.getText()));
-            product.setInStock(Integer.parseInt(inStock.getText()));
-            product.setMin(Integer.parseInt(min.getText()));
-            product.setMax(Integer.parseInt(max.getText()));
-            //assign Product associatedParts reference to modified list
-            product.setAssociatedParts(tempPartsList);
+            if (tempPartsList.size() < 1){
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("All parts removed.\n"
+                        + "You can't sell a box of air. Maybe delete "
+                        + "this product?");
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.OK){
+                    Inventory.removeProduct(product.getProductID());
+                    InventoryManager.toMain();
+                    return;
+                }else return;
+            }
+            int productIDnew = Integer.parseInt(productID.getText());
+            String nameNew = name.getText();
+            double priceNew = Double.parseDouble(price.getText());
+            int inStockNew = Integer.parseInt(inStock.getText());
+            int minNew = Integer.parseInt(min.getText());
+            int maxNew = Integer.parseInt(max.getText());
+            newProduct = new Product(tempPartsList, productIDnew,
+                    nameNew, priceNew, inStockNew, minNew, maxNew);
+            if (Inventory.productCheck(newProduct)) {
+                Inventory.replaceProduct(product, newProduct);
+            } else {
+                return;
+            }
         } catch (NumberFormatException e) {
-            //alert dialog for textfield format problems
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("oh snap");
-            alert.setContentText("Text Entered in Number Field");
-            alert.showAndWait();
+            Inventory.alertFormat();
             return;
         }
         InventoryManager.toMain();
@@ -148,52 +154,52 @@ public class ModifyProductController implements Initializable {
 
     @FXML
     private void addPartButtonClick(ActionEvent event) {
-        if (partsTable.getSelectionModel().getSelectedItem() != null){
-        tempPartsList.add(partsTable.getSelectionModel()
-            .getSelectedItem());
+        if (partsTable.getSelectionModel().getSelectedItem() != null) {
+            tempPartsList.add(partsTable.getSelectionModel()
+                    .getSelectedItem());
         }
     }
-    
-    private void loadPartTable(){
+
+    private void loadPartTable() {
         partsTable.setItems(Inventory.getAllParts());
         partIDcolumn.setCellValueFactory(new PropertyValueFactory<>("partID"));
         partNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInStockColumn.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         partPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        partPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>(){
+        partPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>() {
             @Override
-            public void updateItem(Double price, boolean empty){
+            public void updateItem(Double price, boolean empty) {
                 super.updateItem(price, empty);
-                if (empty){
+                if (empty) {
                     setText(null);
-                }else{
-                    setText(String.format("$%.2f", price));
+                } else {
+                    setText(String.format("$%,.2f", price));
                 }
             }
         });
-        partsTable.getColumns().setAll(partIDcolumn, partNameColumn, 
+        partsTable.getColumns().setAll(partIDcolumn, partNameColumn,
                 partInStockColumn, partPriceColumn);
     }
-    
-    private void loadAddPartTable(){
+
+    private void loadAddPartTable() {
         addPartsTable.setItems(tempPartsList);
         addPartIDcolumn.setCellValueFactory(new PropertyValueFactory<>("partID"));
         addPartNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         addPartInStockColumn.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         addPartPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        addPartPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>(){
+        addPartPriceColumn.setCellFactory(cell -> new TableCell<Part, Double>() {
             @Override
-            public void updateItem(Double price, boolean empty){
+            public void updateItem(Double price, boolean empty) {
                 super.updateItem(price, empty);
-                if (empty){
+                if (empty) {
                     setText(null);
-                }else{
-                    setText(String.format("$%.2f", price));
+                } else {
+                    setText(String.format("$%,.2f", price));
                 }
             }
         });
-        addPartsTable.getColumns().setAll(addPartIDcolumn, addPartNameColumn, 
+        addPartsTable.getColumns().setAll(addPartIDcolumn, addPartNameColumn,
                 addPartInStockColumn, addPartPriceColumn);
     }
-    
+
 }
