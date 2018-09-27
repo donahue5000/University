@@ -1,7 +1,6 @@
 package View_Controller;
 
-//todo    productPriceCheck javadocs
-//todo    partScreenLayout
+//todo    javadocs partScreenLayout testing
 import Model.*;
 import java.io.IOException;
 import java.net.URL;
@@ -50,14 +49,12 @@ public class MainScreenController implements Initializable {
     @FXML
     private TextField productSearch;
 
-    //references for passing Parts to modify screens
     private static Part modifiedPart;
     private static Product modifiedProduct;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadTables();
-        //reset selected table references for modify screens
         modifiedPart = null;
         modifiedProduct = null;
     }
@@ -69,7 +66,6 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void addPartButtonClick(ActionEvent event) throws IOException {
-        //load add Part screen
         Parent loader = FXMLLoader.load(getClass()
                 .getResource("AddPart.fxml"));
         Scene scene = new Scene(loader);
@@ -81,7 +77,6 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void modifyPartButtonClick(ActionEvent event) throws IOException {
-        //ensure Part table item is selected
         if (partsTable.getSelectionModel().getSelectedItem() == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("oh snap");
@@ -90,10 +85,8 @@ public class MainScreenController implements Initializable {
             return;
         }
 
-        //store selected Part reference
         modifiedPart = partsTable.getSelectionModel().getSelectedItem();
 
-        //load modify Part screen
         Parent loader = FXMLLoader.load(getClass()
                 .getResource("ModifyPart.fxml"));
         Scene scene = new Scene(loader);
@@ -111,19 +104,25 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void partSearchButtonClick(ActionEvent event) {
-        if (partSearch.getText().trim().equals("")) {
-            Inventory.alertSearchEmpty();
-            return;
-        }
-        Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
-                .getText()));
-        if (searchedPart != null) {
-            partsTable.getSelectionModel().select(searchedPart);
-            partsTable.scrollTo(searchedPart);
-        } else {
+        try {
+            if (partSearch.getText().trim().equals("")) {
+                Inventory.alertSearchEmpty();
+                return;
+            }
+            Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
+                    .getText()));
+            if (searchedPart != null) {
+                partsTable.getSelectionModel().select(searchedPart);
+                partsTable.scrollTo(searchedPart);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("ID " + partSearch.getText() + " Not Found");
+                alert.showAndWait();
+            }
+        } catch (NumberFormatException numberFormatException) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("ID " + partSearch.getText() + " Not Found");
+            alert.setContentText("Invalid ID");
             alert.showAndWait();
         }
     }
@@ -149,26 +148,31 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void productSearchButtonClick(ActionEvent event) {
-        if (productSearch.getText().trim().equals("")) {
-            Inventory.alertSearchEmpty();
-            return;
-        }
-        Product searchedProduct = Inventory.lookupProduct(Integer.
-                parseInt(productSearch.getText()));
-        if (searchedProduct != null) {
-            productsTable.getSelectionModel().select(searchedProduct);
-            productsTable.scrollTo(searchedProduct);
-        } else {
+        try {
+            if (productSearch.getText().trim().equals("")) {
+                Inventory.alertSearchEmpty();
+                return;
+            }
+            Product searchedProduct = Inventory.lookupProduct(Integer.
+                    parseInt(productSearch.getText()));
+            if (searchedProduct != null) {
+                productsTable.getSelectionModel().select(searchedProduct);
+                productsTable.scrollTo(searchedProduct);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("ID " + productSearch.getText() + " Not Found");
+                alert.showAndWait();
+            }
+        } catch (NumberFormatException numberFormatException) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("ID " + productSearch.getText() + " Not Found");
+            alert.setContentText("Invalid ID");
             alert.showAndWait();
         }
     }
 
     @FXML
     private void addProductButtonClick(ActionEvent event) throws IOException {
-        //load add Product screen
         Parent loader = FXMLLoader.load(getClass()
                 .getResource("AddProduct.fxml"));
         Scene scene = new Scene(loader);
@@ -180,7 +184,6 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void modifyProductButtonClick(ActionEvent event) throws IOException {
-        //ensure Product table item is selected
         if (productsTable.getSelectionModel().getSelectedItem() == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("oh snap");
@@ -188,10 +191,8 @@ public class MainScreenController implements Initializable {
             alert.showAndWait();
             return;
         }
-        //store selected Product reference
         modifiedProduct = productsTable.getSelectionModel().getSelectedItem();
 
-        //load modify Product screen
         Parent loader = FXMLLoader.load(getClass()
                 .getResource("ModifyProduct.fxml"));
         Scene scene = new Scene(loader);
@@ -218,7 +219,6 @@ public class MainScreenController implements Initializable {
     }
 
     private void loadTables() {
-        //populate Part table
         partsTable.setItems(Inventory.getAllParts());
         partIDcolumn.setCellValueFactory(new PropertyValueFactory<>("partID"));
         partNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -238,7 +238,6 @@ public class MainScreenController implements Initializable {
         partsTable.getColumns().setAll(partIDcolumn, partNameColumn,
                 partInStockColumn, partPriceColumn);
 
-        //populate Product table
         productsTable.setItems(Inventory.getProducts());
         productIDcolumn.setCellValueFactory(new PropertyValueFactory<>("productID"));
         productNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -259,7 +258,6 @@ public class MainScreenController implements Initializable {
                 productInStockColumn, productPriceColumn);
     }
 
-    //Part reference getters for modify screens
     public static Part getModifiedPart() {
         return modifiedPart;
     }

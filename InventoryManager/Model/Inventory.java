@@ -103,19 +103,30 @@ public class Inventory {
     }
 
     public static boolean partCheck(Part part) {
+        String alertText = "";
         boolean result = true;
+        if (part.getName().trim().length() < 1) {
+            alertText += "The Purchasing Department kindly suggests giving"
+                    + " names to parts.\n";
+            result = false;
+        }
         if (part.getInStock() < part.getMin()
                 || part.getInStock() > part.getMax()) {
-            alertInv();
+            alertText += "\nInventory out of range.\n";
             result = false;
         }
         if (part.getMax() < part.getMin()) {
-            alertMax();
+            alertText += "\nInventory maximum less than minimum.\n";
             result = false;
         }
         if (part.getMin() > part.getMax()) {
-            alertMin();
+            alertText += "\nInventory minimum more than maximum.\n"
+                    + "(This exception control approved by the\n"
+                    + "Department of Redundancy Department)\n";
             result = false;
+        }
+        if (!result) {
+            failedCheck(alertText);
         }
         return result;
 
@@ -123,52 +134,56 @@ public class Inventory {
 
     public static boolean productCheck(Product product) {
         boolean result = true;
+        String alertText = "";
+        if (product.getName().trim().length() < 1) {
+            alertText += "The Marketing Department kindly suggests naming "
+                    + "products, citing potential loss of sales from blank "
+                    + "billboards.\n";
+            result = false;
+        }
         if (product.getInStock() < product.getMin()
                 || product.getInStock() > product.getMax()) {
-            alertInv();
+            alertText += "\nInventory out of range.\n";
             result = false;
         }
         if (product.getMax() < product.getMin()) {
-            alertMax();
+            alertText += "\nInventory maximum less than minimum.\n";
             result = false;
         }
         if (product.getMin() > product.getMax()) {
-            alertMin();
+            alertText += "\nInventory minimum more than maximum.\n"
+                    + "(This exception control approved by the\n"
+                    + "Department of Redundancy Department)\n";
             result = false;
         }
         if (product.getAssociatedParts().size() < 1) {
-            alertPartMissing(product);
+            alertText += "\nThe Operations Department suggests "
+                    + "assigning at least one part to each product, kindly "
+                    + "reminding the user that 'stuff is made of other stuff.'\n";
             result = false;
+        }
+        double partSum = 0;
+        for (Part part : product.getAssociatedParts()) {
+            partSum += part.getPrice();
+        }
+        if (partSum > product.getPrice()) {
+            alertText += "\nCost of parts: "
+                    + String.format("$%,.2f", partSum)
+                    + "\nProduct selling price: "
+                    + String.format("$%,.2f", product.getPrice())
+                    + "\nThe Accounting Department kindly suggests "
+                    + "Googling the phrase 'profit margin'.\n";
+            result = false;
+        }
+        if (!result) {
+            failedCheck(alertText);
         }
         return result;
     }
 
-    //alerts
-    public static void alertInv() {
+    public static void failedCheck(String alertText) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText("Inventory out of range");
-        alert.showAndWait();
-    }
-
-    public static void alertMax() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText("Max lower than Min");
-        alert.showAndWait();
-    }
-
-    public static void alertMin() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText("Min higher than Max\n\n\n"
-                + "Yes, checking for both max under min\n"
-                + "and min over max is redundant.\n\n"
-                + "Required by the course checklist though, so here ya go :)");
-        alert.showAndWait();
-    }
-
-    public static void alertPartMissing(Product product) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText("Product must have one part.\n"
-                + "Trying to sell a box of nothing, are we?");
+        alert.setContentText(alertText);
         alert.showAndWait();
     }
 
@@ -180,25 +195,21 @@ public class Inventory {
 
     public static void alertFormat() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("oh snap");
-        alert.setContentText("Uhhh, those boxes need numbers and words...\n"
+        alert.setContentText("All those little boxes need stuff in them.\n"
                 + "Tip: put numbers where numbers go and words where words go");
         alert.showAndWait();
     }
 
     public static ButtonType alertCancel() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Cancel");
         alert.setContentText("Discard changes?");
         alert.showAndWait();
         return alert.getResult();
     }
 
     public static void alertSearchEmpty() {
-        Alert empty = new Alert(Alert.AlertType.ERROR);
-        empty.setTitle("Error");
-        empty.setContentText("Search Field Empty");
-        empty.showAndWait();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("Search Field Empty");
+        alert.showAndWait();
     }
-
 }

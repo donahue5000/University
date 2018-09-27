@@ -10,7 +10,6 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -45,13 +44,11 @@ public class ModifyPartController implements Initializable {
     @FXML
     private RadioButton outsourcedSelected;
 
-    //references to modified objects
     private Part part;
     private Part newPart;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //initialize textfields
         part = MainScreenController.getModifiedPart();
         partID.setText(Integer.toString(part.getPartID()));
         name.setText(part.getName());
@@ -60,7 +57,6 @@ public class ModifyPartController implements Initializable {
         max.setText(Integer.toString(part.getMax()));
         min.setText(Integer.toString(part.getMin()));
 
-        //configure screen for InhousePart and downcast for MachineID access
         if (part instanceof InhousePart) {
             inHouseSelected.setSelected(true);
             machineIDcompanyNameLabel.setText("Machine ID");
@@ -68,8 +64,7 @@ public class ModifyPartController implements Initializable {
             machineIDcompanyName.setText(
                     Integer.toString(inhousePart.getMachineID()));
         }
-
-        //configure screen for OutsourcedPart and downcast for CompanyName access
+        
         if (part instanceof OutsourcedPart) {
             outsourcedSelected.setSelected(true);
             machineIDcompanyNameLabel.setText("Company Name");

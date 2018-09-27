@@ -9,10 +9,7 @@ import Model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-/**
- *
- * @author Brian Donahue
- */
+
 public class InventoryManager extends Application {
 
     private static Stage stage;

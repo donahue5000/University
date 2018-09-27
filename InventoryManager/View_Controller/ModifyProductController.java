@@ -66,7 +66,6 @@ public class ModifyProductController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //initialize textfields
         product = MainScreenController.getModifiedProduct();
         productID.setText(Integer.toString(product.getProductID()));
         name.setText(product.getName());
@@ -75,30 +74,34 @@ public class ModifyProductController implements Initializable {
         max.setText(Integer.toString(product.getMax()));
         min.setText(Integer.toString(product.getMin()));
 
-        //copy associatedParts to temp Part list for modifying pre-save
         tempPartsList = FXCollections.observableArrayList();
         product.getAssociatedParts().forEach(part -> tempPartsList.add(part));
 
-        //initialize tables
         loadPartTable();
         loadAddPartTable();
     }
 
     @FXML
     private void searchPartButtonClick(ActionEvent event) {
-        if (partSearch.getText().trim().equals("")) {
-            Inventory.alertSearchEmpty();
-            return;
-        }
-        Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
-                .getText()));
-        if (searchedPart != null) {
-            partsTable.getSelectionModel().select(searchedPart);
-            partsTable.scrollTo(searchedPart);
-        } else {
+        try {
+            if (partSearch.getText().trim().equals("")) {
+                Inventory.alertSearchEmpty();
+                return;
+            }
+            Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
+                    .getText()));
+            if (searchedPart != null) {
+                partsTable.getSelectionModel().select(searchedPart);
+                partsTable.scrollTo(searchedPart);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("ID " + partSearch.getText() + " Not Found");
+                alert.showAndWait();
+            }
+        } catch (NumberFormatException numberFormatException) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("ID " + partSearch.getText() + " Not Found");
+            alert.setContentText("Invalid ID");
             alert.showAndWait();
         }
     }

@@ -67,7 +67,6 @@ public class AddProductController implements Initializable {
         loadPartTable();
         loadAddPartTable();
 
-        //get next Product ID
         productIDnew = Inventory.getProductID();
 
         productID.setText("Auto Gen: " + Integer.toString(productIDnew));
@@ -76,19 +75,25 @@ public class AddProductController implements Initializable {
 
     @FXML
     private void searchPartButtonClick(ActionEvent event) {
-        if (partSearch.getText().trim().equals("")) {
-            Inventory.alertSearchEmpty();
-            return;
-        }
-        Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
-                .getText()));
-        if (searchedPart != null) {
-            partsTable.getSelectionModel().select(searchedPart);
-            partsTable.scrollTo(searchedPart);
-        } else {
+        try {
+            if (partSearch.getText().trim().equals("")) {
+                Inventory.alertSearchEmpty();
+                return;
+            }
+            Part searchedPart = Inventory.lookupPart(Integer.parseInt(partSearch
+                    .getText()));
+            if (searchedPart != null) {
+                partsTable.getSelectionModel().select(searchedPart);
+                partsTable.scrollTo(searchedPart);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("ID " + partSearch.getText() + " Not Found");
+                alert.showAndWait();
+            }
+        } catch (NumberFormatException numberFormatException) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("ID " + partSearch.getText() + " Not Found");
+            alert.setContentText("Invalid ID");
             alert.showAndWait();
         }
     }
