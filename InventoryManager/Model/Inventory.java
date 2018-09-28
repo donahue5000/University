@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.Iterator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -57,6 +58,25 @@ public class Inventory {
         alert.setContentText("Confirm Delete");
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
+            Iterator<Product> iterator = products.iterator();
+            while (iterator.hasNext()) {
+                Product product = iterator.next();
+                ObservableList<Part> tempParts = product.getAssociatedParts();
+                if (tempParts.contains(part) && tempParts.size() > 1) {
+                    tempParts.remove(part);
+                } else if (tempParts.contains(part)) {
+                    Alert lastPart = new Alert(Alert.AlertType.CONFIRMATION);
+                    lastPart.setContentText(part.getName() + " is the only part "
+                            + "used to make " + product.getName() + ". Delete it "
+                            + "as well?");
+                    lastPart.showAndWait();
+                    if (lastPart.getResult() == ButtonType.OK) {
+                        iterator.remove();
+                        products.remove(product);
+                    }
+                }
+            }
+
             return allParts.remove(part);
         } else {
             return false;
