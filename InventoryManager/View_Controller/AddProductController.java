@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -19,6 +18,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ *
+ * @author Brian Donahue
+ */
 public class AddProductController implements Initializable {
 
     @FXML
@@ -86,15 +89,10 @@ public class AddProductController implements Initializable {
                 partsTable.getSelectionModel().select(searchedPart);
                 partsTable.scrollTo(searchedPart);
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText("ID " + partSearch.getText() + " Not Found");
-                alert.showAndWait();
+                Inventory.alertID(partSearch.getText());
             }
         } catch (NumberFormatException numberFormatException) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Invalid ID");
-            alert.showAndWait();
+            Inventory.alertID(partSearch.getText());
         }
     }
 
@@ -102,6 +100,8 @@ public class AddProductController implements Initializable {
     private void deletePartButtonClick(ActionEvent event) {
         if (addPartsTable.getSelectionModel().getSelectedItem() != null) {
             associatedParts.remove(addPartsTable.getSelectionModel().getSelectedItem());
+        } else {
+            Inventory.alertSelection();
         }
     }
 
@@ -138,6 +138,8 @@ public class AddProductController implements Initializable {
     private void addPartButtonClick(ActionEvent event) {
         if (partsTable.getSelectionModel().getSelectedItem() != null) {
             associatedParts.add(partsTable.getSelectionModel().getSelectedItem());
+        } else {
+            Inventory.alertSelection();
         }
     }
 

@@ -7,9 +7,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import Model.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
-
+/**
+ *
+ * Launcher
+ */
 public class InventoryManager extends Application {
 
     private static Stage stage;
@@ -26,10 +28,17 @@ public class InventoryManager extends Application {
         stage.show();
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     *
+     */
     public static void toMain() {
         stage.setTitle("Inventory Manager");
         stage.setScene(scene);

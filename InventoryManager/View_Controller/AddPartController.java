@@ -14,6 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 
+/**
+ *
+ * @author Brian Donahue
+ */
 public class AddPartController implements Initializable {
 
     @FXML

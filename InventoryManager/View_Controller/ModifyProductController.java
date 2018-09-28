@@ -12,7 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -21,6 +20,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ *
+ * @author Brian Donahue
+ */
 public class ModifyProductController implements Initializable {
 
     @FXML
@@ -94,15 +97,10 @@ public class ModifyProductController implements Initializable {
                 partsTable.getSelectionModel().select(searchedPart);
                 partsTable.scrollTo(searchedPart);
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText("ID " + partSearch.getText() + " Not Found");
-                alert.showAndWait();
+                Inventory.alertID(partSearch.getText());
             }
         } catch (NumberFormatException numberFormatException) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Invalid ID");
-            alert.showAndWait();
+            Inventory.alertID(partSearch.getText());
         }
     }
 
@@ -110,6 +108,8 @@ public class ModifyProductController implements Initializable {
     private void deletePartButtonClick(ActionEvent event) {
         if (addPartsTable.getSelectionModel().getSelectedItem() != null) {
             tempPartsList.remove(addPartsTable.getSelectionModel().getSelectedItem());
+        }else{
+            Inventory.alertSelection();
         }
     }
 
@@ -124,12 +124,7 @@ public class ModifyProductController implements Initializable {
     private void saveButtonClick(ActionEvent event) {
         try {
             if (tempPartsList.size() < 1){
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setContentText("All parts removed.\n"
-                        + "You can't sell a box of air. Maybe delete "
-                        + "this product?");
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.OK){
+                if (Inventory.alertLastPart()){
                     Inventory.removeProduct(product.getProductID());
                     InventoryManager.toMain();
                     return;
@@ -160,6 +155,8 @@ public class ModifyProductController implements Initializable {
         if (partsTable.getSelectionModel().getSelectedItem() != null) {
             tempPartsList.add(partsTable.getSelectionModel()
                     .getSelectedItem());
+        }else{
+            Inventory.alertSelection();
         }
     }
 

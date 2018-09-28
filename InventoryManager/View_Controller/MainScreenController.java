@@ -1,6 +1,6 @@
 package View_Controller;
 
-//todo    javadocs testing persistantProductPartList namesOnDeleteAlert
+
 import Model.*;
 import java.io.IOException;
 import java.net.URL;
@@ -11,7 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -20,6 +19,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+/**
+ *
+ * @author Brian Donahue
+ */
 public class MainScreenController implements Initializable {
 
     @FXML
@@ -78,10 +81,7 @@ public class MainScreenController implements Initializable {
     @FXML
     private void modifyPartButtonClick(ActionEvent event) throws IOException {
         if (partsTable.getSelectionModel().getSelectedItem() == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("oh snap");
-            alert.setContentText("Select a part to modify");
-            alert.showAndWait();
+            Inventory.alertSelection();
             return;
         }
 
@@ -115,25 +115,17 @@ public class MainScreenController implements Initializable {
                 partsTable.getSelectionModel().select(searchedPart);
                 partsTable.scrollTo(searchedPart);
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText("ID " + partSearch.getText() + " Not Found");
-                alert.showAndWait();
+                Inventory.alertID(partSearch.getText());
             }
         } catch (NumberFormatException numberFormatException) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Invalid ID");
-            alert.showAndWait();
+            Inventory.alertID(partSearch.getText());
         }
     }
 
     @FXML
     private void deletePartButtonClick(ActionEvent event) {
         if (partsTable.getSelectionModel().getSelectedItem() == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("oh snap");
-            alert.setContentText("Select a part to delete");
-            alert.showAndWait();
+            Inventory.alertSelection();
         } else {
             Inventory.deletePart(partsTable.getSelectionModel()
                     .getSelectedItem());
@@ -159,15 +151,10 @@ public class MainScreenController implements Initializable {
                 productsTable.getSelectionModel().select(searchedProduct);
                 productsTable.scrollTo(searchedProduct);
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText("ID " + productSearch.getText() + " Not Found");
-                alert.showAndWait();
+                Inventory.alertID(productSearch.getText());
             }
         } catch (NumberFormatException numberFormatException) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Invalid ID");
-            alert.showAndWait();
+            Inventory.alertID(productSearch.getText());
         }
     }
 
@@ -185,10 +172,7 @@ public class MainScreenController implements Initializable {
     @FXML
     private void modifyProductButtonClick(ActionEvent event) throws IOException {
         if (productsTable.getSelectionModel().getSelectedItem() == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("oh snap");
-            alert.setContentText("Select a product to modify");
-            alert.showAndWait();
+            Inventory.alertSelection();
             return;
         }
         modifiedProduct = productsTable.getSelectionModel().getSelectedItem();
@@ -207,11 +191,8 @@ public class MainScreenController implements Initializable {
         Product productToDelete = productsTable.getSelectionModel()
                 .getSelectedItem();
         if (productToDelete == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("oh snap");
-            alert.setContentText("Select a product to delete");
-            alert.showAndWait();
-        } else if (productToDelete.getAssociatedParts().size() > 1) {
+            Inventory.alertSelection();
+        } else if (productToDelete.getAssociatedParts().size() > 0) {
             Inventory.alertDeleteProductWithParts();
         } else {
             Inventory.removeProduct(productToDelete.getProductID());
@@ -258,10 +239,18 @@ public class MainScreenController implements Initializable {
                 productInStockColumn, productPriceColumn);
     }
 
+    /**
+     *
+     * @return Part object for modification
+     */
     public static Part getModifiedPart() {
         return modifiedPart;
     }
 
+    /**
+     *
+     * @return Product object for modification
+     */
     public static Product getModifiedProduct() {
         return modifiedProduct;
     }
