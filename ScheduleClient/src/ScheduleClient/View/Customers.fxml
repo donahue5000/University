@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ScheduleClient.View.CustomersController">
+   <children>
+      <VBox prefHeight="800.0" prefWidth="200.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" focusTraversable="false" prefHeight="30.0" prefWidth="200.0" text="Current User:">
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="userLabel" alignment="CENTER" focusTraversable="false" layoutX="10.0" layoutY="20.0" prefHeight="30.0" prefWidth="200.0" text="userLabel">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Button mnemonicParsing="false" onAction="#logoutButtonClick" prefWidth="150.0" text="Logout">
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="734.0" prefWidth="200.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#appointmentsButtonClick" prefWidth="150.0" text="Appointments">
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#customersButtonClick" prefWidth="150.0" text="Customers">
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#reportsButtonClick" prefWidth="150.0" text="Reports">
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#logButtonClick" prefWidth="150.0" text="Log">
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <VBox layoutX="200.0" prefHeight="800.0" prefWidth="1000.0">
+         <children>
+            <TableView fx:id="customersTableView" onMouseClicked="#customersTableViewClick" prefHeight="475.0" prefWidth="1000.0">
+              <columns>
+                <TableColumn fx:id="customerIdColumn" editable="false" prefWidth="100.0" text="Customer ID" />
+                <TableColumn fx:id="nameColumn" editable="false" prefWidth="250.0" text="Name" />
+                  <TableColumn fx:id="phoneColumn" editable="false" prefWidth="200.0" text="Phone" />
+                  <TableColumn fx:id="cityColumn" editable="false" prefWidth="225.0" text="City" />
+                  <TableColumn fx:id="cityColumn1" editable="false" prefWidth="225.0" text="Country" />
+              </columns>
+            </TableView>
+            <HBox prefHeight="350.0" prefWidth="1000.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="350.0" prefWidth="100.0" spacing="20.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#newButtonClick" prefWidth="90.0" text="New" />
+                        <Button mnemonicParsing="false" onAction="#updateButtonClick" prefWidth="90.0" text="Update" />
+                        <Button mnemonicParsing="false" onAction="#deleteButtonClick" prefWidth="90.0" text="Delete" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="350.0" prefWidth="150.0">
+                     <children>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Customer ID">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Name">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Address ID">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Address">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Address 2">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="City">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Country">
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Postal Code">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Phone">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Create Date">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Created By">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Last Update">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Last Update By">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_LEFT" prefHeight="350.0" prefWidth="750.0">
+                     <children>
+                        <TextField fx:id="customerIDField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="nameField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="addressIDField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="addressField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="address2Field" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="cityField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="countryField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="postalCodeField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="phoneField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="createDateField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="createdByField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="lastUpdateField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="lastUpdateByField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children></VBox>
+   </children>
+</AnchorPane>
