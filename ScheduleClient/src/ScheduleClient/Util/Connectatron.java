@@ -13,7 +13,7 @@ public class Connectatron {
 
     private static final String DBURL = "jdbc:mysql://52.206.157.109/U04VEO";
     private static final String DBUSER = "U04VEO";
-    private static final String DBPW = "53688353958";
+    private static final String DBPW = "xxxxxxx";
     public static String USER;
     public static int USERID;
     
