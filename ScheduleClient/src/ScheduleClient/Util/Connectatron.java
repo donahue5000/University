@@ -1,6 +1,9 @@
+
+
 package ScheduleClient.Util;
 
 import ScheduleClient.Model.Appointment;
+import ScheduleClient.Model.Customer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,43 +16,38 @@ public class Connectatron {
 
     private static final String DBURL = "jdbc:mysql://52.206.157.109/U04VEO";
     private static final String DBUSER = "U04VEO";
-    private static final String DBPW = "xxxxxxx";
+    private static final String DBPW = "53688353958";
     public static String USER;
     public static int USERID;
-    
-    
-    
-    
-    public static Connection getCon(){
-        try{
+
+    public static Connection getCon() {
+        try {
             Connection con = DriverManager.getConnection(DBURL, DBUSER, DBPW);
             return con;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             Oops.badGetCon();
         }
         return null;
     }
-        
-    public static void closeCon(Connection con){
-        try{
+
+    public static void closeCon(Connection con) {
+        try {
             con.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             Oops.badCloseCon();
         }
     }
-    
-    public static ObservableList<Appointment> getAppointmentList(int userID){
+
+    public static ObservableList<Appointment> getAppointmentList() {
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
         Connection con = getCon();
-        try{
-//            PreparedStatement statement = con.prepareStatement("SELECT * FROM appointment"
-//                    + " WHERE userId = ?");
+        try {
             PreparedStatement statement = con.prepareStatement("SELECT appointment.*, "
                     + "customer.customerName FROM appointment, customer WHERE "
                     + "appointment.userId = ? AND appointment.customerId = customer.customerId");
             statement.setString(1, Integer.toString(Connectatron.USERID));
             ResultSet result = statement.executeQuery();
-            while(result.next()){
+            while (result.next()) {
                 appointmentList.add(new Appointment(
                         result.getInt("appointmentId"),
                         result.getInt("customerId"),
@@ -69,13 +67,294 @@ public class Connectatron {
                         result.getString("customerName")
                 ));
             }
+        } catch (SQLException e) {
+            Oops.badGetCon();
+            closeCon(con);
+        }
+
+        closeCon(con);
+        return appointmentList;
+    }
+
+    public static ObservableList<Customer> getCustomerList() {
+        ObservableList<Customer> customerList = FXCollections.observableArrayList();
+        Connection con = getCon();
+        try {
+            PreparedStatement statement = con.prepareStatement(
+                    "SELECT customer.*, address.address, address.address2, "
+                    + "address.cityId, address.postalCode, "
+                    + "address.phone, city.city, city.countryId, country.country "
+                    + "FROM customer, address, city, country "
+                    + "WHERE customer.addressId = address.addressId AND "
+                    + "address.cityId = city.cityId AND "
+                    + "city.countryId = country.countryId");
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                customerList.add(new Customer(
+                        result.getInt("customerId"),
+                        result.getString("customerName"),
+                        result.getInt("addressId"),
+                        result.getInt("active"),
+                        result.getString("createDate"),
+                        result.getString("createdBy"),
+                        result.getString("lastUpdate"),
+                        result.getString("lastUpdateBy"),
+                        result.getString("address"),
+                        result.getString("address2"),
+                        result.getInt("cityId"),
+                        result.getString("postalCode"),
+                        result.getString("phone"),
+                        result.getString("city"),
+                        result.getInt("countryId"),
+                        result.getString("country")
+                ));
+            }
+        } catch (SQLException e) {
+            Oops.badGetCon();
+            closeCon(con);
+        }
+
+        closeCon(con);
+        return customerList;
+    }
+
+    public static Customer getCustomerByID(int ID) {
+        Customer customer = null;
+        Connection con = getCon();
+        try {
+            PreparedStatement statement = con.prepareStatement(
+                    "SELECT customer.*, address.address, address.address2, "
+                    + "address.cityId, address.postalCode, "
+                    + "address.phone, city.city, city.countryId, country.country "
+                    + "FROM customer, address, city, country "
+                    + "WHERE customer.customerId = ? AND "
+                    + "customer.addressId = address.addressId AND "
+                    + "address.cityId = city.cityId AND "
+                    + "city.countryId = country.countryId");
+            statement.setInt(1, ID);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                customer = new Customer(
+                        result.getInt("customerId"),
+                        result.getString("customerName"),
+                        result.getInt("addressId"),
+                        result.getInt("active"),
+                        result.getString("createDate"),
+                        result.getString("createdBy"),
+                        result.getString("lastUpdate"),
+                        result.getString("lastUpdateBy"),
+                        result.getString("address"),
+                        result.getString("address2"),
+                        result.getInt("cityId"),
+                        result.getString("postalCode"),
+                        result.getString("phone"),
+                        result.getString("city"),
+                        result.getInt("countryId"),
+                        result.getString("country")
+                );
+            }
+        } catch (SQLException e) {
+            Oops.badGetCon();
+            closeCon(con);
+        }
+
+        closeCon(con);
+        return customer;
+    }
+
+    
+    
+    public static void scrubAllID(Customer customer){
+        int countryID = customer.getCountryId();
+        int cityID = customer.getCityId();
+        int addressID = customer.getAddressId();
+        
+        Connection con = getCon();
+        PreparedStatement ps;
+        ResultSet rs;
+        try{
+            
+            //find or insert country, set ID
+            ps = con.prepareStatement("SELECT countryId FROM country WHERE country = ?");
+            ps.setString(1, customer.getCountry());
+            rs = ps.executeQuery();
+            if (rs.next()){
+                countryID = rs.getInt(1);
+            }else{
+                ps = con.prepareStatement("INSERT INTO country VALUES ("
+                        + "null, "
+                        + "?, "
+                        + "now(), "
+                        + "?, "
+                        + "now(), "
+                        + "?)");
+                ps.setString(1, customer.getCountry());
+                ps.setString(2, USER);
+                ps.setString(3, USER);
+                ps.executeUpdate();
+                ps = con.prepareStatement("SELECT MAX(countryId) FROM country");
+                rs = ps.executeQuery();
+                if (rs.next()){
+                    countryID = rs.getInt(1);
+                }
+            }
+            
+            
+            
+            //find or insert city, set ID
+            ps = con.prepareStatement("SELECT cityId FROM city WHERE city = ? AND countryId = ?");
+            ps.setString(1, customer.getCity());
+            ps.setInt(2, countryID);
+            rs = ps.executeQuery();
+            if (rs.next()){
+                cityID = rs.getInt(1);
+            }else{
+                ps = con.prepareStatement("INSERT INTO city VALUES ("
+                        + "null, "
+                        + "?, "
+                        + "?, "
+                        + "now(), "
+                        + "?, "
+                        + "now(), "
+                        + "?)");
+                ps.setString(1, customer.getCity());
+                ps.setInt(2, countryID);
+                ps.setString(3, USER);
+                ps.setString(4, USER);
+                ps.executeUpdate();
+                ps = con.prepareStatement("SELECT MAX(cityId) FROM city");
+                rs = ps.executeQuery();
+                if (rs.next()){
+                    cityID = rs.getInt(1);
+                }
+            }
+            
+            
+            
+            //find or insert address, set ID
+            ps = con.prepareStatement("SELECT addressId from address WHERE "
+                    + "address = ? AND "
+                    + "address2 = ? AND "
+                    + "cityId = ? AND "
+                    + "postalCode = ? AND "
+                    + "phone = ?");
+            ps.setString(1, customer.getAddress());
+            ps.setString(2, customer.getAddress2());
+            ps.setInt(3, cityID);
+            ps.setString(4, customer.getPostalCode());
+            ps.setString(5, customer.getPhone());
+            rs = ps.executeQuery();
+            if (rs.next()){
+                addressID = rs.getInt(1);
+            }else{
+                ps = con.prepareStatement("INSERT INTO address VALUES("
+                        + "null, ?, ?, ?, ?, ?, "
+                        + "now(), ?, now(), ?)");
+                ps.setString(1, customer.getAddress());
+                ps.setString(2, customer.getAddress2());
+                ps.setInt(3, cityID);
+                ps.setString(4, customer.getPostalCode());
+                ps.setString(5, customer.getPhone());
+                ps.setString(6, USER);
+                ps.setString(7, USER);
+                ps.executeUpdate();
+                ps = con.prepareStatement("SELECT MAX(addressId) FROM address");
+                rs = ps.executeQuery();
+                if (rs.next()){
+                    addressID = rs.getInt(1);
+                }
+            }
+            
+            
+            customer.setCountryId(countryID);
+            customer.setCityId(cityID);
+            customer.setAddressId(addressID);
+            closeCon(con);
+        }catch(SQLException e){
+            Oops.badGetCon();
+            closeCon(con);
+            System.out.println(e.getErrorCode());
+            System.out.println(e.getMessage());
+        }
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    public static void insertCustomer(Customer existingCustomer) {
+        Connection con = getCon();
+        try{
+            if (existingCustomer.getCustomerId() > 0){
+                PreparedStatement ps = con.prepareStatement("UPDATE customer SET "
+                        + "customerName = ?, "
+                        + "addressId = ?, "
+                        + "lastUpdate = now(), "
+                        + "lastUpdateBy = ? "
+                        + "WHERE customerId = ?"
+                );
+                ps.setString(1, existingCustomer.getCustomerName());
+                ps.setInt(2, existingCustomer.getAddressId());
+                ps.setString(3, USER);
+                ps.setInt(4, existingCustomer.getCustomerId());
+                ps.executeUpdate();
+                
+            }else{
+                PreparedStatement ps = con.prepareStatement("INSERT INTO customer VALUES( "
+                        + "null, "
+                        + "?, "
+                        + "?, "
+                        + "1, "
+                        + "now(), "
+                        + "?, "
+                        + "now(), "
+                        + "?)"
+                );
+                ps.setString(1, existingCustomer.getCustomerName());
+                ps.setInt(2, existingCustomer.getAddressId());
+                ps.setString(3, USER);
+                ps.setString(4, USER);
+                ps.executeUpdate();
+                
+                
+                ps = con.prepareStatement("SELECT MAX(customerId) FROM customer");
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()){
+                    existingCustomer.setCustomerId(rs.getInt(1));
+                }
+            }
+            
         }catch(SQLException e){
             Oops.badGetCon();
             closeCon(con);
         }
-        
         closeCon(con);
-        return appointmentList;
     }
     
+    
+    
+    public static void deleteCustomer(int customerID){
+        Connection con = getCon();
+        try{
+            PreparedStatement ps = con.prepareStatement("DELETE FROM appointment WHERE customerId = ?");
+            ps.setInt(1, customerID);
+            ps.executeUpdate();
+            ps = con.prepareStatement("DELETE FROM customer WHERE customerId = ?");
+            ps.setInt(1, customerID);
+            ps.executeUpdate();
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            Oops.badGetCon();
+            closeCon(con);
+        }
+        closeCon(con);
+    }
+    
+    
+
 }

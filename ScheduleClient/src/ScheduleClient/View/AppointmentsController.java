@@ -1,8 +1,10 @@
 package ScheduleClient.View;
 
 import ScheduleClient.Model.Appointment;
+import ScheduleClient.Model.Customer;
 import static ScheduleClient.ScheduleClient.stage;
 import ScheduleClient.Util.Connectatron;
+import ScheduleClient.Util.Oops;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -81,16 +83,15 @@ public class AppointmentsController implements Initializable {
     private TextField typeField;
     @FXML
     private RadioButton radioAll;
-    
-    
+
     private ObservableList<Appointment> appointmentList;
     private Appointment selectedAppointment;
-    
+    private Customer selectedCustomer;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         userLabel.setText(Connectatron.USER);
-        appointmentList = Connectatron.getAppointmentList(Connectatron.USERID);
+        appointmentList = Connectatron.getAppointmentList();
         loadTable();
     }
 
@@ -117,8 +118,10 @@ public class AppointmentsController implements Initializable {
 
     @FXML
     private void customersButtonClick(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(
-                "Customers.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Customers.fxml"));
+        CustomersController showCustomerInList = new CustomersController();
+        loader.setController(showCustomerInList);
+        Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Schedule Client - Customers");
@@ -146,11 +149,31 @@ public class AppointmentsController implements Initializable {
     }
 
     @FXML
-    private void newButtonClick(ActionEvent event) {
+    private void newButtonClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentUpdate.fxml"));
+        AppointmentUpdateController newAppointment = new AppointmentUpdateController();
+        loader.setController(newAppointment);
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Schedule Client - Adding New Appointment");
+        stage.show();
     }
 
     @FXML
-    private void updateButtonClick(ActionEvent event) {
+    private void updateButtonClick(ActionEvent event) throws IOException {
+        if (selectedAppointment == null) {
+            Oops.noSelection();
+            return;
+        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentUpdate.fxml"));
+        AppointmentUpdateController newAppointment = new AppointmentUpdateController(selectedAppointment);
+        loader.setController(newAppointment);
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Schedule Client - Updating Appointment");
+        stage.show();
     }
 
     @FXML
@@ -158,7 +181,23 @@ public class AppointmentsController implements Initializable {
     }
 
     @FXML
-    private void SelectedCustomerButtonClick(ActionEvent event) {
+    private void SelectedCustomerButtonClick(ActionEvent event) throws IOException {
+        if (appointmentsTableView.getSelectionModel().getSelectedItem() != null) {
+            int customerID = appointmentsTableView.getSelectionModel().getSelectedItem().getCustomerId();
+            selectedCustomer = Connectatron.getCustomerByID(customerID);
+        }
+        if (selectedCustomer == null){
+            Oops.noSelection();
+            return;
+        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerUpdate.fxml"));
+        CustomerUpdateController newCustomer = new CustomerUpdateController(selectedCustomer);
+        loader.setController(newCustomer);
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Schedule Client - Updating Customer Record");
+        stage.show();
     }
 
     private void loadTable() {
@@ -173,7 +212,7 @@ public class AppointmentsController implements Initializable {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
-        
+
         appointmentsTableView.getSortOrder().add(startColumn);
         appointmentsTableView.getColumns().setAll(startColumn, endColumn, customerColumn,
                 titleColumn, descriptionColumn, locationColumn);
@@ -181,7 +220,9 @@ public class AppointmentsController implements Initializable {
 
     @FXML
     private void appointmentsTableViewClick(MouseEvent event) {
-        selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
+        if (appointmentsTableView.getSelectionModel().getSelectedItem() != null) {
+            selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
+        }
         if (selectedAppointment != null) {
             appointmentIDField.setText(selectedAppointment.appointmentIdProperty().getValue().toString());
             customerIDField.setText(selectedAppointment.customerIdProperty().getValue().toString());

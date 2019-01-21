@@ -3,8 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -61,43 +59,17 @@
       </VBox>
       <VBox layoutX="200.0" prefHeight="800.0" prefWidth="1000.0">
          <children>
-            <TableView fx:id="customersTableView" onMouseClicked="#customersTableViewClick" prefHeight="475.0" prefWidth="1000.0">
-              <columns>
-                <TableColumn fx:id="customerIdColumn" editable="false" prefWidth="150.0" text="Customer ID" />
-                <TableColumn fx:id="nameColumn" editable="false" prefWidth="250.0" text="Name" />
-                  <TableColumn fx:id="phoneColumn" editable="false" prefWidth="200.0" text="Phone" />
-                  <TableColumn fx:id="cityColumn" editable="false" prefWidth="200.0" text="City" />
-                  <TableColumn fx:id="countryColumn" editable="false" prefWidth="200.0" text="Country" />
-              </columns>
-            </TableView>
-            <HBox prefHeight="350.0" prefWidth="1000.0">
+            <HBox prefHeight="800.0" prefWidth="1000.0">
                <children>
                   <VBox alignment="CENTER" prefHeight="350.0" prefWidth="100.0" spacing="20.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#newButtonClick" prefWidth="90.0" text="New" />
-                        <Button mnemonicParsing="false" onAction="#updateButtonClick" prefWidth="90.0" text="Update" />
-                        <Button mnemonicParsing="false" onAction="#deleteButtonClick" prefWidth="90.0" text="Delete" />
+                        <Button mnemonicParsing="false" onAction="#saveButtonClick" prefWidth="90.0" text="Save" />
+                        <Button mnemonicParsing="false" onAction="#cancelButtonClick" prefWidth="90.0" text="Cancel" />
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="350.0" prefWidth="150.0">
+                  <VBox alignment="CENTER" prefHeight="350.0" prefWidth="150.0" spacing="20.0">
                      <children>
-                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Customer ID">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
-                        </Label>
                         <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Name">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
-                        </Label>
-                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Address ID">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
@@ -150,55 +122,17 @@
                               <Insets left="10.0" />
                            </padding>
                         </Label>
-                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Create Date">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
-                        </Label>
-                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Created By">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
-                        </Label>
-                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Last Update">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
-                        </Label>
-                        <Label maxHeight="20.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" text="Last Update By">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
-                        </Label>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER_LEFT" prefHeight="350.0" prefWidth="750.0">
+                  <VBox alignment="CENTER_LEFT" prefHeight="350.0" prefWidth="750.0" spacing="20.0">
                      <children>
-                        <TextField fx:id="customerIDField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="nameField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="addressIDField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="addressField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="address2Field" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="cityField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="countryField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="postalCodeField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="phoneField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="createDateField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="createdByField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="lastUpdateField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="lastUpdateByField" editable="false" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="nameField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="addressField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="address2Field" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="cityField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="countryField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="postalCodeField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
+                        <TextField fx:id="phoneField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
                      </children>
                   </VBox>
                </children>

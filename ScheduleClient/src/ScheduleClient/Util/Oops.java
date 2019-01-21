@@ -45,8 +45,43 @@ public class Oops {
         alert.showAndWait();
     }
     
-    
+    public static void noSelection(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("Nothing selected");
+        alert.showAndWait();
+    }
     
     
     
 }
+
+
+/* todo
+
+
+add/modify/delete appointment
+
+week/month selector
+
+reports-
+    number of appointment types by month
+    schedule per user
+    one more
+
+localize time - localization api / datetime api
+
+15 minute appointment alert
+
+exception controls, 2 different mechanisms-
+    business hours appointment
+    overlapping appointments
+    invalid data entry
+
+log file
+
+lambdas
+streams and filters
+
+
+
+*/
