@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -88,11 +89,25 @@ public class AppointmentsController implements Initializable {
     private Appointment selectedAppointment;
     private Customer selectedCustomer;
 
+    public AppointmentsController() {
+    }
+
+    public AppointmentsController(Appointment newAppointment) {
+        selectedAppointment = newAppointment;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         userLabel.setText(Connectatron.USER);
         appointmentList = Connectatron.getAppointmentList();
         loadTable();
+        if (selectedAppointment != null) {
+            //Lambda (runnable to select the new appointment after scene finishes loading)
+            Platform.runLater(() -> {
+                appointmentsTableView.getSelectionModel().select(selectedAppointment);
+                showSelection();
+            });
+        }
     }
 
     @FXML
@@ -108,8 +123,10 @@ public class AppointmentsController implements Initializable {
 
     @FXML
     private void appointmentsButtonClick(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(
-                "Appointments.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Appointments.fxml"));
+        AppointmentsController showAppointments = new AppointmentsController();
+        loader.setController(showAppointments);
+        Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Schedule Client - Appointments");
@@ -177,7 +194,22 @@ public class AppointmentsController implements Initializable {
     }
 
     @FXML
-    private void deleteButtonClick(ActionEvent event) {
+    private void deleteButtonClick(ActionEvent event) throws IOException {
+        selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
+        if (selectedAppointment != null) {
+            Connectatron.deleteAppointment(selectedAppointment.getAppointmentId());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Appointments.fxml"));
+            AppointmentsController showAppointments = new AppointmentsController();
+            loader.setController(showAppointments);
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Schedule Client - Appointments");
+            stage.show();
+        } else {
+            Oops.noSelection();
+            return;
+        }
     }
 
     @FXML
@@ -186,7 +218,7 @@ public class AppointmentsController implements Initializable {
             int customerID = appointmentsTableView.getSelectionModel().getSelectedItem().getCustomerId();
             selectedCustomer = Connectatron.getCustomerByID(customerID);
         }
-        if (selectedCustomer == null){
+        if (selectedCustomer == null) {
             Oops.noSelection();
             return;
         }
@@ -218,11 +250,8 @@ public class AppointmentsController implements Initializable {
                 titleColumn, descriptionColumn, locationColumn);
     }
 
-    @FXML
-    private void appointmentsTableViewClick(MouseEvent event) {
-        if (appointmentsTableView.getSelectionModel().getSelectedItem() != null) {
-            selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
-        }
+    private void showSelection() {
+        selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
         if (selectedAppointment != null) {
             appointmentIDField.setText(selectedAppointment.appointmentIdProperty().getValue().toString());
             customerIDField.setText(selectedAppointment.customerIdProperty().getValue().toString());
@@ -240,6 +269,11 @@ public class AppointmentsController implements Initializable {
             userIDField.setText(selectedAppointment.userIdProperty().getValue().toString());
             typeField.setText(selectedAppointment.typeProperty().getValue());
         }
+    }
+
+    @FXML
+    private void appointmentsTableViewClick(MouseEvent event) {
+        showSelection();
     }
 
 }

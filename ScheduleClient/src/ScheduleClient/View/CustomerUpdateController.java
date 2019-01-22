@@ -3,6 +3,7 @@ package ScheduleClient.View;
 import ScheduleClient.Model.Customer;
 import static ScheduleClient.ScheduleClient.stage;
 import ScheduleClient.Util.Connectatron;
+import ScheduleClient.Util.Oops;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -76,8 +77,8 @@ public class CustomerUpdateController implements Initializable {
     @FXML
     private void appointmentsButtonClick(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Appointments.fxml"));
-        AppointmentsController appointments = new AppointmentsController();
-        loader.setController(appointments);
+        AppointmentsController showAppointments = new AppointmentsController();
+        loader.setController(showAppointments);
         Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -137,12 +138,16 @@ public class CustomerUpdateController implements Initializable {
             );
             existingCustomer = newCustomer;
         }
-        
+
         Connectatron.scrubAllID(existingCustomer);
-        Connectatron.insertCustomer(existingCustomer);
-        
-        
-        
+
+        try {
+            Connectatron.insertCustomer(existingCustomer);
+        } catch (NullPointerException n) {
+            Oops.blankField();
+            return;
+        }
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Customers.fxml"));
         CustomersController showCustomerInList = new CustomersController(
                 Connectatron.getCustomerByID(existingCustomer.getCustomerId()));
@@ -152,9 +157,7 @@ public class CustomerUpdateController implements Initializable {
         stage.setScene(scene);
         stage.setTitle("Schedule Client - New Customer Added, Huzzah!");
         stage.show();
-        
-        
-        
+
     }
 
     @FXML

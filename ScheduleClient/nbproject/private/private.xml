@@ -4,9 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/zap/ScheduleClient/src/ScheduleClient/View/AppointmentUpdateController.java</file>
+            <file>file:/C:/zap/ScheduleClient/src/ScheduleClient/Util/Connectatron.java</file>
             <file>file:/C:/zap/ScheduleClient/src/ScheduleClient/View/AppointmentsController.java</file>
             <file>file:/C:/zap/ScheduleClient/src/ScheduleClient/View/CustomersController.java</file>
             <file>file:/C:/zap/ScheduleClient/src/ScheduleClient/View/CustomerUpdateController.java</file>
+            <file>file:/C:/zap/ScheduleClient/src/ScheduleClient/Util/Oops.java</file>
         </group>
     </open-files>
 </project-private>

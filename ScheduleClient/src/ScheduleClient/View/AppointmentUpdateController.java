@@ -4,6 +4,7 @@ import ScheduleClient.Model.Appointment;
 import ScheduleClient.Model.Customer;
 import static ScheduleClient.ScheduleClient.stage;
 import ScheduleClient.Util.Connectatron;
+import ScheduleClient.Util.Oops;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -62,10 +63,14 @@ public class AppointmentUpdateController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         userLabel.setText(Connectatron.USER);
         types = FXCollections.observableArrayList("Training", "Repair", "Installation");
+        customerList = Connectatron.getCustomerList();
+        loadComboBoxes();
         if (existingAppointment != null) {
             loadFields();
+            customerMenu.setValue(selectedCustomer);
+            typeMenu.setValue(existingAppointment.getType());
         }
-        loadComboBoxes();
+
     }
 
     @FXML
@@ -82,8 +87,8 @@ public class AppointmentUpdateController implements Initializable {
     @FXML
     private void appointmentsButtonClick(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Appointments.fxml"));
-        AppointmentsController appointments = new AppointmentsController();
-        loader.setController(appointments);
+        AppointmentsController showAppointments = new AppointmentsController();
+        loader.setController(showAppointments);
         Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -112,16 +117,50 @@ public class AppointmentUpdateController implements Initializable {
     }
 
     @FXML
-    private void saveButtonClick(ActionEvent event) {
+    private void saveButtonClick(ActionEvent event) throws IOException {
+        if (existingAppointment != null) {
+            newAppointment = existingAppointment;
+            Connectatron.deleteAppointment(existingAppointment.getAppointmentId());
+        } else {
+            newAppointment = new Appointment();
+            newAppointment.setAppointmentId(-1);
+            newAppointment.setUserId(Connectatron.USERID);
+        }
         
-        
+        try{
+        newAppointment.setCustomerId(customerMenu.getValue().getCustomerId());
+        newAppointment.setCustomerName(customerMenu.getValue().getCustomerName());
+        newAppointment.setTitle(titleField.getText());
+        newAppointment.setDescription(descriptionField.getText());
+        newAppointment.setLocation(locationField.getText());
+        newAppointment.setContact(contactField.getText());
+        newAppointment.setUrl(urlField.getText());
+        newAppointment.setStart(startField.getText());
+        newAppointment.setEnd(endField.getText());
+        newAppointment.setType(typeMenu.getValue());
+        }catch (NullPointerException n){
+            Oops.blankField();
+            return;
+        }
+        Connectatron.insertAppointment(newAppointment);
+
+        //go back, highlight newAppointment
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Appointments.fxml"));
+        AppointmentsController showAppointments = new AppointmentsController(
+                Connectatron.getAppointmentByID(newAppointment.getAppointmentId()));
+        loader.setController(showAppointments);
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Schedule Client - Appointments");
+        stage.show();
     }
 
     @FXML
     private void cancelButtonClick(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Appointments.fxml"));
-        CustomersController appointments = new CustomersController();
-        loader.setController(appointments);
+        AppointmentsController showAppointments = new AppointmentsController();
+        loader.setController(showAppointments);
         Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -138,9 +177,10 @@ public class AppointmentUpdateController implements Initializable {
         contactField.setText(existingAppointment.getContact());
         urlField.setText(existingAppointment.getUrl());
     }
-    
-    private void loadComboBoxes(){
+
+    private void loadComboBoxes() {
         typeMenu.setItems(types);
+        customerMenu.setItems(customerList);
     }
 
 }

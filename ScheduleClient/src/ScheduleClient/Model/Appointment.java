@@ -28,7 +28,24 @@ public class Appointment {
     private StringProperty customerName;
 
     
-    
+    public Appointment(){
+        this.appointmentId = new SimpleIntegerProperty();
+        this.customerId = new SimpleIntegerProperty();
+        this.title = new SimpleStringProperty();
+        this.description = new SimpleStringProperty();
+        this.location = new SimpleStringProperty();
+        this.contact = new SimpleStringProperty();
+        this.url = new SimpleStringProperty();
+        this.start = new SimpleStringProperty();
+        this.end = new SimpleStringProperty();
+        this.createDate = new SimpleStringProperty();
+        this.createdBy = new SimpleStringProperty();
+        this.lastUpdate = new SimpleStringProperty();
+        this.lastUpdatedBy = new SimpleStringProperty();
+        this.userId = new SimpleIntegerProperty();
+        this.type = new SimpleStringProperty();
+        this.customerName = new SimpleStringProperty();
+    }
     
     
     public Appointment(int appointmentId, int customerId, String title,

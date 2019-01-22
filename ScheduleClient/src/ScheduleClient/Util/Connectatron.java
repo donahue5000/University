@@ -1,5 +1,3 @@
-
-
 package ScheduleClient.Util;
 
 import ScheduleClient.Model.Appointment;
@@ -161,26 +159,63 @@ public class Connectatron {
         closeCon(con);
         return customer;
     }
+    
+    public static Appointment getAppointmentByID(int ID) {
+        Appointment appointment = null;
+        Connection con = getCon();
+        try {
+            PreparedStatement statement = con.prepareStatement(
+                    "SELECT appointment.* FROM appointment WHERE appointmentId = ?");
+            statement.setInt(1, ID);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                appointment = new Appointment(
+                        result.getInt("appointmentId"),
+                        result.getInt("customerId"),
+                        result.getString("title"),
+                        result.getString("description"),
+                        result.getString("location"),
+                        result.getString("contact"),
+                        result.getString("url"),
+                        result.getString("start"),
+                        result.getString("end"),
+                        result.getString("createDate"),
+                        result.getString("createdBy"),
+                        result.getString("lastUpdate"),
+                        result.getString("lastUpdateBy"),
+                        result.getInt("userId"),
+                        result.getString("type"),
+                        Connectatron.getCustomerByID(result.getInt("customerId")).getCustomerName()
+                );
+            }
+        } catch (SQLException e) {
+            Oops.badGetCon();
+            closeCon(con);
+        }
 
+        closeCon(con);
+        return appointment;
+    }
     
     
-    public static void scrubAllID(Customer customer){
+
+    public static void scrubAllID(Customer customer) {
         int countryID = customer.getCountryId();
         int cityID = customer.getCityId();
         int addressID = customer.getAddressId();
-        
+
         Connection con = getCon();
         PreparedStatement ps;
         ResultSet rs;
-        try{
-            
+        try {
+
             //find or insert country, set ID
             ps = con.prepareStatement("SELECT countryId FROM country WHERE country = ?");
             ps.setString(1, customer.getCountry());
             rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 countryID = rs.getInt(1);
-            }else{
+            } else {
                 ps = con.prepareStatement("INSERT INTO country VALUES ("
                         + "null, "
                         + "?, "
@@ -194,21 +229,19 @@ public class Connectatron {
                 ps.executeUpdate();
                 ps = con.prepareStatement("SELECT MAX(countryId) FROM country");
                 rs = ps.executeQuery();
-                if (rs.next()){
+                if (rs.next()) {
                     countryID = rs.getInt(1);
                 }
             }
-            
-            
-            
+
             //find or insert city, set ID
             ps = con.prepareStatement("SELECT cityId FROM city WHERE city = ? AND countryId = ?");
             ps.setString(1, customer.getCity());
             ps.setInt(2, countryID);
             rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 cityID = rs.getInt(1);
-            }else{
+            } else {
                 ps = con.prepareStatement("INSERT INTO city VALUES ("
                         + "null, "
                         + "?, "
@@ -224,13 +257,11 @@ public class Connectatron {
                 ps.executeUpdate();
                 ps = con.prepareStatement("SELECT MAX(cityId) FROM city");
                 rs = ps.executeQuery();
-                if (rs.next()){
+                if (rs.next()) {
                     cityID = rs.getInt(1);
                 }
             }
-            
-            
-            
+
             //find or insert address, set ID
             ps = con.prepareStatement("SELECT addressId from address WHERE "
                     + "address = ? AND "
@@ -244,9 +275,9 @@ public class Connectatron {
             ps.setString(4, customer.getPostalCode());
             ps.setString(5, customer.getPhone());
             rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 addressID = rs.getInt(1);
-            }else{
+            } else {
                 ps = con.prepareStatement("INSERT INTO address VALUES("
                         + "null, ?, ?, ?, ?, ?, "
                         + "now(), ?, now(), ?)");
@@ -260,37 +291,28 @@ public class Connectatron {
                 ps.executeUpdate();
                 ps = con.prepareStatement("SELECT MAX(addressId) FROM address");
                 rs = ps.executeQuery();
-                if (rs.next()){
+                if (rs.next()) {
                     addressID = rs.getInt(1);
                 }
             }
-            
-            
+
             customer.setCountryId(countryID);
             customer.setCityId(cityID);
             customer.setAddressId(addressID);
             closeCon(con);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             Oops.badGetCon();
             closeCon(con);
             System.out.println(e.getErrorCode());
             System.out.println(e.getMessage());
         }
-        
-        
+
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    public static void insertCustomer(Customer existingCustomer) {
+
+    public static void insertCustomer(Customer existingCustomer) throws NullPointerException {
         Connection con = getCon();
-        try{
-            if (existingCustomer.getCustomerId() > 0){
+        try {
+            if (existingCustomer.getCustomerId() > 0) {
                 PreparedStatement ps = con.prepareStatement("UPDATE customer SET "
                         + "customerName = ?, "
                         + "addressId = ?, "
@@ -298,13 +320,17 @@ public class Connectatron {
                         + "lastUpdateBy = ? "
                         + "WHERE customerId = ?"
                 );
+                try{
                 ps.setString(1, existingCustomer.getCustomerName());
                 ps.setInt(2, existingCustomer.getAddressId());
                 ps.setString(3, USER);
                 ps.setInt(4, existingCustomer.getCustomerId());
                 ps.executeUpdate();
-                
-            }else{
+                }catch(NullPointerException n){
+                    closeCon(con);
+                    throw new NullPointerException();
+                }
+            } else {
                 PreparedStatement ps = con.prepareStatement("INSERT INTO customer VALUES( "
                         + "null, "
                         + "?, "
@@ -315,46 +341,141 @@ public class Connectatron {
                         + "now(), "
                         + "?)"
                 );
+                try{
                 ps.setString(1, existingCustomer.getCustomerName());
                 ps.setInt(2, existingCustomer.getAddressId());
                 ps.setString(3, USER);
                 ps.setString(4, USER);
                 ps.executeUpdate();
-                
-                
+                }catch (NullPointerException n){
+                    closeCon(con);
+                    throw new NullPointerException();
+                }
                 ps = con.prepareStatement("SELECT MAX(customerId) FROM customer");
                 ResultSet rs = ps.executeQuery();
-                if (rs.next()){
+                if (rs.next()) {
                     existingCustomer.setCustomerId(rs.getInt(1));
                 }
             }
-            
-        }catch(SQLException e){
+
+        } catch (SQLException e) {
             Oops.badGetCon();
             closeCon(con);
         }
         closeCon(con);
     }
-    
-    
-    
-    public static void deleteCustomer(int customerID){
+
+    public static void deleteCustomer(int customerID) {
         Connection con = getCon();
-        try{
+        try {
             PreparedStatement ps = con.prepareStatement("DELETE FROM appointment WHERE customerId = ?");
             ps.setInt(1, customerID);
             ps.executeUpdate();
             ps = con.prepareStatement("DELETE FROM customer WHERE customerId = ?");
             ps.setInt(1, customerID);
             ps.executeUpdate();
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             Oops.badGetCon();
             closeCon(con);
         }
         closeCon(con);
     }
-    
-    
+
+    public static void deleteAppointment(int appointmentId) {
+        Connection con = getCon();
+        try {
+            PreparedStatement ps = con.prepareStatement("DELETE FROM appointment WHERE appointmentId = ?");
+            ps.setInt(1, appointmentId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            Oops.badGetCon();
+            closeCon(con);
+        }
+        closeCon(con);
+    }
+
+    public static void insertAppointment(Appointment newAppointment) {
+        Connection con = getCon();
+        try {
+            if (newAppointment.getAppointmentId() > 0) {
+                //new appt with existing values
+                PreparedStatement ps = con.prepareStatement("INSERT INTO appointment VALUES("
+                        + "?, " //appointmentId
+                        + "?, " //customerId
+                        + "?, " //title
+                        + "?, " //description
+                        + "?, " //location
+                        + "?, " //contact
+                        + "?, " //url
+                        + "?, " //start
+                        + "?, " //end
+                        + "?, " //createDate
+                        + "?, " //createdBy
+                        + "now(), " //lastUpdate
+                        + "?, " //lastUpdateBy
+                        + "?, " //userId
+                        + "?)"); //type
+                ps.setInt(1, newAppointment.getAppointmentId());
+                ps.setInt(2, newAppointment.getCustomerId());
+                ps.setString(3, newAppointment.getTitle());
+                ps.setString(4, newAppointment.getDescription());
+                ps.setString(5, newAppointment.getLocation());
+                ps.setString(6, newAppointment.getContact());
+                ps.setString(7, newAppointment.getUrl());
+                ps.setString(8, newAppointment.getStart());
+                ps.setString(9, newAppointment.getEnd());
+                ps.setString(10, newAppointment.getCreateDate());
+                ps.setString(11, newAppointment.getCreatedBy());
+                ps.setString(12, USER);
+                ps.setInt(13, newAppointment.getUserId());
+                ps.setString(14, newAppointment.getType());
+                ps.executeUpdate();
+            } else {
+                PreparedStatement ps = con.prepareStatement("INSERT INTO appointment VALUES("
+                        + "null, " //appointmentId
+                        + "?, " //customerId
+                        + "?, " //title
+                        + "?, " //description
+                        + "?, " //location
+                        + "?, " //contact
+                        + "?, " //url
+                        + "?, " //start
+                        + "?, " //end
+                        + "now(), " //createDate
+                        + "?, " //createdBy
+                        + "now(), " //lastUpdate
+                        + "?, " //lastUpdateBy
+                        + "?, " //userId
+                        + "?)"); //type
+                ps.setInt(1, newAppointment.getCustomerId());
+                ps.setString(2, newAppointment.getTitle());
+                ps.setString(3, newAppointment.getDescription());
+                ps.setString(4, newAppointment.getLocation());
+                ps.setString(5, newAppointment.getContact());
+                ps.setString(6, newAppointment.getUrl());
+                ps.setString(7, newAppointment.getStart());
+                ps.setString(8, newAppointment.getEnd());
+                ps.setString(9, USER);
+                ps.setString(10, USER);
+                ps.setInt(11, newAppointment.getUserId());
+                ps.setString(12, newAppointment.getType());
+                ps.executeUpdate();
+                
+                ps = con.prepareStatement("SELECT MAX(appointmentId) FROM appointment");
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    newAppointment.setAppointmentId(rs.getInt(1));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            Oops.badGetCon();
+            closeCon(con);
+        }
+
+        closeCon(con);
+    }
 
 }

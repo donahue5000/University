@@ -89,8 +89,10 @@ public class LoginController implements Initializable {
             if (password.equals(checkedPassword)) {
                 Connectatron.USER = username;
                 Connectatron.USERID = userID;
-                Parent root = FXMLLoader.load(getClass().getResource(
-                        "Appointments.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("Appointments.fxml"));
+                AppointmentsController showAppointments = new AppointmentsController();
+                loader.setController(showAppointments);
+                Parent root = loader.load();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.setTitle("Schedule Client - Appointments");
@@ -101,7 +103,7 @@ public class LoginController implements Initializable {
                 closeCon(con);
                 return;
             }
-            
+
             closeCon(con);
         }
     }

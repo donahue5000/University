@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ScheduleClient.View.AppointmentsController">
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox prefHeight="800.0" prefWidth="200.0">
          <children>
@@ -92,10 +92,10 @@
               <columns>
                 <TableColumn fx:id="startColumn" editable="false" prefWidth="150.0" text="Start" />
                 <TableColumn fx:id="endColumn" editable="false" prefWidth="150.0" text="End" />
-                  <TableColumn fx:id="customerColumn" editable="false" prefWidth="125.0" text="Customer" />
+                  <TableColumn fx:id="customerColumn" editable="false" prefWidth="200.0" text="Customer" />
                   <TableColumn fx:id="titleColumn" editable="false" prefWidth="125.0" text="Title" />
-                  <TableColumn fx:id="descriptionColumn" editable="false" prefWidth="250.0" text="Description" />
-                  <TableColumn fx:id="locationColumn" editable="false" prefWidth="200.0" text="Location" />
+                  <TableColumn fx:id="descriptionColumn" editable="false" prefWidth="200.0" text="Description" />
+                  <TableColumn fx:id="locationColumn" editable="false" prefWidth="175.0" text="Location" />
               </columns>
             </TableView>
             <HBox prefHeight="400.0" prefWidth="1000.0">

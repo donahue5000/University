@@ -58,7 +58,7 @@ public class Customer {
     
     @Override
     public String toString(){
-        return ("ID: " + getCustomerId() + " " + getCustomerName());
+        return ("ID:" + getCustomerId() + " " + getCustomerName());
     }
     
 

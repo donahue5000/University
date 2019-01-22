@@ -104,8 +104,10 @@ public class CustomersController implements Initializable {
 
     @FXML
     private void appointmentsButtonClick(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(
-                "Appointments.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Appointments.fxml"));
+        AppointmentsController showAppointments = new AppointmentsController();
+        loader.setController(showAppointments);
+        Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Schedule Client - Appointments");

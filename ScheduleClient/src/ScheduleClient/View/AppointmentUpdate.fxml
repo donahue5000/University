@@ -137,9 +137,9 @@
                   </VBox>
                   <VBox alignment="CENTER_LEFT" prefHeight="350.0" prefWidth="750.0" spacing="20.0">
                      <children>
-                        <TextField fx:id="startField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <TextField fx:id="endField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
-                        <ComboBox fx:id="customerMenu" prefWidth="200.0" promptText="Select Customer" />
+                        <TextField fx:id="startField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" promptText="YYYY-MM-DD HH-MM" />
+                        <TextField fx:id="endField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" promptText="YYYY-MM-DD HH-MM" />
+                        <ComboBox fx:id="customerMenu" prefWidth="300.0" promptText="Select Customer" />
                         <TextField fx:id="titleField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
                         <TextField fx:id="descriptionField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
                         <TextField fx:id="locationField" maxHeight="20.0" minHeight="25.0" prefHeight="25.0" />
