@@ -109,6 +109,16 @@ public class CustomerUpdateController implements Initializable {
     @FXML
     private void saveButtonClick(ActionEvent event) throws IOException {
         if (isExisting) {
+            if (nameField.getText().length() < 1
+                    || addressField.getText().length() < 1
+                    || address2Field.getText().length() < 1
+                    || postalCodeField.getText().length() < 1
+                    || phoneField.getText().length() < 1
+                    || cityField.getText().length() < 1
+                    || countryField.getText().length() < 1) {
+                Oops.blankField();
+                return;
+            }
             existingCustomer.setCustomerName(nameField.getText());
             existingCustomer.setAddress(addressField.getText());
             existingCustomer.setAddress2(address2Field.getText());
@@ -118,6 +128,16 @@ public class CustomerUpdateController implements Initializable {
             existingCustomer.setPhone(phoneField.getText());
             existingCustomer.setLastUpdateBy(Connectatron.USER);
         } else {
+            if (nameField.getText().length() < 1
+                    || addressField.getText().length() < 1
+                    || address2Field.getText().length() < 1
+                    || postalCodeField.getText().length() < 1
+                    || phoneField.getText().length() < 1
+                    || cityField.getText().length() < 1
+                    || countryField.getText().length() < 1) {
+                Oops.blankField();
+                return;
+            }
             Customer newCustomer = new Customer(
                     -1,
                     nameField.getText(),

@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Locale;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,8 +39,12 @@ public class LoginController implements Initializable {
     private Label usernameLabel;
     @FXML
     private Label passwordLabel;
-
+    @FXML
+    private Label timeLabel;
+    
+    
     ResourceBundle rb = null;
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -48,6 +54,7 @@ public class LoginController implements Initializable {
         welcomeLabel.setText(rb.getString("welcome"));
         usernameLabel.setText(rb.getString("username"));
         passwordLabel.setText(rb.getString("password"));
+        timeLabel.setText(Connectatron.getDTFormatter().format(LocalDateTime.now(ZoneId.systemDefault())));
     }
 
     @FXML

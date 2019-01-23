@@ -7,7 +7,10 @@ import ScheduleClient.Util.Connectatron;
 import ScheduleClient.Util.Oops;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -69,6 +72,8 @@ public class AppointmentUpdateController implements Initializable {
             loadFields();
             customerMenu.setValue(selectedCustomer);
             typeMenu.setValue(existingAppointment.getType());
+        } else {
+            loadNewFields();
         }
 
     }
@@ -126,25 +131,30 @@ public class AppointmentUpdateController implements Initializable {
             newAppointment.setAppointmentId(-1);
             newAppointment.setUserId(Connectatron.USERID);
         }
-        
-        try{
-        newAppointment.setCustomerId(customerMenu.getValue().getCustomerId());
-        newAppointment.setCustomerName(customerMenu.getValue().getCustomerName());
-        newAppointment.setTitle(titleField.getText());
-        newAppointment.setDescription(descriptionField.getText());
-        newAppointment.setLocation(locationField.getText());
-        newAppointment.setContact(contactField.getText());
-        newAppointment.setUrl(urlField.getText());
-        newAppointment.setStart(startField.getText());
-        newAppointment.setEnd(endField.getText());
-        newAppointment.setType(typeMenu.getValue());
-        }catch (NullPointerException n){
+
+        try {
+            newAppointment.setCustomerId(customerMenu.getValue().getCustomerId());
+            newAppointment.setCustomerName(customerMenu.getValue().getCustomerName());
+            newAppointment.setTitle(titleField.getText());
+            newAppointment.setDescription(descriptionField.getText());
+            newAppointment.setLocation(locationField.getText());
+            newAppointment.setContact(contactField.getText());
+            newAppointment.setUrl(urlField.getText());
+            newAppointment.setStart(startField.getText());
+            newAppointment.setEnd(endField.getText());
+            newAppointment.setType(typeMenu.getValue());
+        } catch (NullPointerException n) {
             Oops.blankField();
             return;
         }
-        Connectatron.insertAppointment(newAppointment);
 
-        //go back, highlight newAppointment
+        try {
+            Connectatron.insertAppointment(newAppointment);
+        } catch (NullPointerException n) {
+            Oops.blankField();
+            return;
+        }
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Appointments.fxml"));
         AppointmentsController showAppointments = new AppointmentsController(
                 Connectatron.getAppointmentByID(newAppointment.getAppointmentId()));
@@ -176,6 +186,12 @@ public class AppointmentUpdateController implements Initializable {
         locationField.setText(existingAppointment.getLocation());
         contactField.setText(existingAppointment.getContact());
         urlField.setText(existingAppointment.getUrl());
+    }
+
+    private void loadNewFields() {
+        startField.setText(Connectatron.getDTFormatter().format(LocalDateTime.now(ZoneId.systemDefault())));
+        endField.setText(Connectatron.getDTFormatter().format(LocalDateTime.now(ZoneId.systemDefault())));
+        urlField.setText("N/A");
     }
 
     private void loadComboBoxes() {

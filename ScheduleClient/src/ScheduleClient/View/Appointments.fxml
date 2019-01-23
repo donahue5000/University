@@ -92,8 +92,8 @@
               <columns>
                 <TableColumn fx:id="startColumn" editable="false" prefWidth="150.0" text="Start" />
                 <TableColumn fx:id="endColumn" editable="false" prefWidth="150.0" text="End" />
-                  <TableColumn fx:id="customerColumn" editable="false" prefWidth="200.0" text="Customer" />
-                  <TableColumn fx:id="titleColumn" editable="false" prefWidth="125.0" text="Title" />
+                  <TableColumn fx:id="customerColumn" editable="false" prefWidth="175.0" text="Customer" />
+                  <TableColumn fx:id="titleColumn" editable="false" prefWidth="150.0" text="Title" />
                   <TableColumn fx:id="descriptionColumn" editable="false" prefWidth="200.0" text="Description" />
                   <TableColumn fx:id="locationColumn" editable="false" prefWidth="175.0" text="Location" />
               </columns>

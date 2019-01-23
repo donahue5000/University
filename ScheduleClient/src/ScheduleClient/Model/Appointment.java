@@ -1,5 +1,6 @@
 package ScheduleClient.Model;
 
+import ScheduleClient.Util.Connectatron;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;

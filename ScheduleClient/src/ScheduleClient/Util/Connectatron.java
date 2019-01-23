@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -159,7 +161,7 @@ public class Connectatron {
         closeCon(con);
         return customer;
     }
-    
+
     public static Appointment getAppointmentByID(int ID) {
         Appointment appointment = null;
         Connection con = getCon();
@@ -196,8 +198,6 @@ public class Connectatron {
         closeCon(con);
         return appointment;
     }
-    
-    
 
     public static void scrubAllID(Customer customer) {
         int countryID = customer.getCountryId();
@@ -320,13 +320,13 @@ public class Connectatron {
                         + "lastUpdateBy = ? "
                         + "WHERE customerId = ?"
                 );
-                try{
-                ps.setString(1, existingCustomer.getCustomerName());
-                ps.setInt(2, existingCustomer.getAddressId());
-                ps.setString(3, USER);
-                ps.setInt(4, existingCustomer.getCustomerId());
-                ps.executeUpdate();
-                }catch(NullPointerException n){
+                try {
+                    ps.setString(1, existingCustomer.getCustomerName());
+                    ps.setInt(2, existingCustomer.getAddressId());
+                    ps.setString(3, USER);
+                    ps.setInt(4, existingCustomer.getCustomerId());
+                    ps.executeUpdate();
+                } catch (NullPointerException n) {
                     closeCon(con);
                     throw new NullPointerException();
                 }
@@ -341,13 +341,13 @@ public class Connectatron {
                         + "now(), "
                         + "?)"
                 );
-                try{
-                ps.setString(1, existingCustomer.getCustomerName());
-                ps.setInt(2, existingCustomer.getAddressId());
-                ps.setString(3, USER);
-                ps.setString(4, USER);
-                ps.executeUpdate();
-                }catch (NullPointerException n){
+                try {
+                    ps.setString(1, existingCustomer.getCustomerName());
+                    ps.setInt(2, existingCustomer.getAddressId());
+                    ps.setString(3, USER);
+                    ps.setString(4, USER);
+                    ps.executeUpdate();
+                } catch (NullPointerException n) {
                     closeCon(con);
                     throw new NullPointerException();
                 }
@@ -396,7 +396,7 @@ public class Connectatron {
         closeCon(con);
     }
 
-    public static void insertAppointment(Appointment newAppointment) {
+    public static void insertAppointment(Appointment newAppointment) throws NullPointerException {
         Connection con = getCon();
         try {
             if (newAppointment.getAppointmentId() > 0) {
@@ -417,21 +417,26 @@ public class Connectatron {
                         + "?, " //lastUpdateBy
                         + "?, " //userId
                         + "?)"); //type
-                ps.setInt(1, newAppointment.getAppointmentId());
-                ps.setInt(2, newAppointment.getCustomerId());
-                ps.setString(3, newAppointment.getTitle());
-                ps.setString(4, newAppointment.getDescription());
-                ps.setString(5, newAppointment.getLocation());
-                ps.setString(6, newAppointment.getContact());
-                ps.setString(7, newAppointment.getUrl());
-                ps.setString(8, newAppointment.getStart());
-                ps.setString(9, newAppointment.getEnd());
-                ps.setString(10, newAppointment.getCreateDate());
-                ps.setString(11, newAppointment.getCreatedBy());
-                ps.setString(12, USER);
-                ps.setInt(13, newAppointment.getUserId());
-                ps.setString(14, newAppointment.getType());
-                ps.executeUpdate();
+                try {
+                    ps.setInt(1, newAppointment.getAppointmentId());
+                    ps.setInt(2, newAppointment.getCustomerId());
+                    ps.setString(3, newAppointment.getTitle());
+                    ps.setString(4, newAppointment.getDescription());
+                    ps.setString(5, newAppointment.getLocation());
+                    ps.setString(6, newAppointment.getContact());
+                    ps.setString(7, newAppointment.getUrl());
+                    ps.setString(8, newAppointment.getStart());
+                    ps.setString(9, newAppointment.getEnd());
+                    ps.setString(10, newAppointment.getCreateDate());
+                    ps.setString(11, newAppointment.getCreatedBy());
+                    ps.setString(12, USER);
+                    ps.setInt(13, newAppointment.getUserId());
+                    ps.setString(14, newAppointment.getType());
+                    ps.executeUpdate();
+                } catch (NullPointerException n) {
+                    closeCon(con);
+                    throw new NullPointerException();
+                }
             } else {
                 PreparedStatement ps = con.prepareStatement("INSERT INTO appointment VALUES("
                         + "null, " //appointmentId
@@ -449,20 +454,25 @@ public class Connectatron {
                         + "?, " //lastUpdateBy
                         + "?, " //userId
                         + "?)"); //type
-                ps.setInt(1, newAppointment.getCustomerId());
-                ps.setString(2, newAppointment.getTitle());
-                ps.setString(3, newAppointment.getDescription());
-                ps.setString(4, newAppointment.getLocation());
-                ps.setString(5, newAppointment.getContact());
-                ps.setString(6, newAppointment.getUrl());
-                ps.setString(7, newAppointment.getStart());
-                ps.setString(8, newAppointment.getEnd());
-                ps.setString(9, USER);
-                ps.setString(10, USER);
-                ps.setInt(11, newAppointment.getUserId());
-                ps.setString(12, newAppointment.getType());
-                ps.executeUpdate();
-                
+                try {
+                    ps.setInt(1, newAppointment.getCustomerId());
+                    ps.setString(2, newAppointment.getTitle());
+                    ps.setString(3, newAppointment.getDescription());
+                    ps.setString(4, newAppointment.getLocation());
+                    ps.setString(5, newAppointment.getContact());
+                    ps.setString(6, newAppointment.getUrl());
+                    ps.setString(7, newAppointment.getStart());
+                    ps.setString(8, newAppointment.getEnd());
+                    ps.setString(9, USER);
+                    ps.setString(10, USER);
+                    ps.setInt(11, newAppointment.getUserId());
+                    ps.setString(12, newAppointment.getType());
+                    ps.executeUpdate();
+                } catch (NullPointerException n) {
+                    closeCon(con);
+                    throw new NullPointerException();
+                }
+
                 ps = con.prepareStatement("SELECT MAX(appointmentId) FROM appointment");
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
@@ -476,6 +486,16 @@ public class Connectatron {
         }
 
         closeCon(con);
+    }
+
+    public static DateTimeFormatter getDTFormatter() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm");
+        return formatter;
+    }
+
+    public static LocalDateTime getLDT(String date) {
+        LocalDateTime ldt = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm"));
+        return ldt;
     }
 
 }

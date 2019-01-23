@@ -9,10 +9,11 @@
 <AnchorPane id="AnchorPane" prefHeight="200" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ScheduleClient.View.LoginController">
     <children>
         <Button fx:id="loginButton" defaultButton="true" layoutX="329.0" layoutY="155.0" onAction="#loginButtonClick" />
-        <Label fx:id="welcomeLabel" layoutX="14.0" layoutY="14.0" minHeight="20.0" minWidth="200.0" prefHeight="20.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" />
+        <Label fx:id="welcomeLabel" layoutX="22.0" layoutY="14.0" minHeight="20.0" minWidth="200.0" prefHeight="20.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" />
       <TextField fx:id="usernameField" layoutX="107.0" layoutY="85.0" />
       <PasswordField fx:id="passwordField" layoutX="107.0" layoutY="135.0" />
       <Label fx:id="usernameLabel" layoutX="22.0" layoutY="90.0" text="Label" />
       <Label fx:id="passwordLabel" layoutX="22.0" layoutY="145.0" text="Label" />
+      <Label fx:id="timeLabel" layoutX="122.0" layoutY="53.0" minHeight="20.0" minWidth="200.0" prefHeight="20.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" />
     </children>
 </AnchorPane>

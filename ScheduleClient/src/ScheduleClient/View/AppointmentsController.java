@@ -8,6 +8,7 @@ import ScheduleClient.Util.Oops;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -253,6 +254,9 @@ public class AppointmentsController implements Initializable {
     private void showSelection() {
         selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
         if (selectedAppointment != null) {
+            
+            
+            
             appointmentIDField.setText(selectedAppointment.appointmentIdProperty().getValue().toString());
             customerIDField.setText(selectedAppointment.customerIdProperty().getValue().toString());
             titleField.setText(selectedAppointment.titleProperty().getValue());
