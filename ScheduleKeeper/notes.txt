@@ -1,0 +1,44 @@
+gui
+    login localize
+	reminder
+    customers
+	tableview
+	details
+    appointments
+	all tableview
+	next week tableview
+	next month tableview
+	details
+    new/update appointment
+	datepicker
+	time combobox
+	city combobox
+	country populate
+	customer combobox
+	type combobox
+    new/update customer
+	city combobox
+	country populate
+
+DBConnect-
+	login
+	new customer
+	update customer
+	new appointment
+	update appointment
+
+	get customers
+	get appointments
+
+	reminder check
+
+Errors localize
+	bad login
+	bad connection
+	blank fields 
+	overlapping appointment
+	business hours
+	
+
+store datetimes
+hard code city, country
