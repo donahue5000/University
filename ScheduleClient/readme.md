@@ -1,4 +1,3 @@
-working on it
+scrapped
 
-
-original hacky state preserved
+started over with ScheduleKeeper
