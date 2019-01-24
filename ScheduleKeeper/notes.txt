@@ -1,5 +1,5 @@
 gui
-    login localize
+    login localizexxxxxxxxxxxxxxxxxxxx
 	reminder
     customers
 	tableview
@@ -21,7 +21,7 @@ gui
 	country populate
 
 DBConnect-
-	login
+	loginxxxxxxxxxxxxxxxxxxxx
 	new customer
 	update customer
 	new appointment
@@ -32,10 +32,10 @@ DBConnect-
 
 	reminder check
 
-Errors localize
-	bad login
-	bad connection
-	blank fields 
+Errors localizexxxxxxxxxxxxxxxxxx
+	bad loginxxxxxxxxxxxxxxxxx
+	bad connectionxxxxxxxxxxxxxxxx
+	blank fields xxxxxxxxxxxxxxxx
 	overlapping appointment
 	business hours
 	
