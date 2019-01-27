@@ -57,10 +57,14 @@ public class Errors {
     
     public static void badLog(){
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText("Trouble writing to log. You must have broken it.");
+        alert.setContentText("Trouble accessing log file. You must have broken it.");
         alert.showAndWait();
     }
     
-    
+    public static void badSelection(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("Nothing Selected");
+        alert.showAndWait();
+    }
     
 }

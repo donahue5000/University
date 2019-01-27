@@ -1,9 +1,8 @@
 gui
     login localizexxxxxxxxxxxxxxxxxxxx
 	reminder
-    customers
-	tableview
-	details
+    customersxxxxxxxxxxxx
+	tableviewxxxxxxxxxx
     appointments
 	all tableview
 	next week tableview
@@ -17,17 +16,17 @@ gui
 	customer combobox
 	type combobox
     new/update customer
-	city combobox
-	country populate
+	city comboboxxxxxxxxx
+	country populatexxxxxxxxx
 
 DBConnect-
 	loginxxxxxxxxxxxxxxxxxxxx
-	new customer
+	new customerxxxxxxxxxx
 	update customer
 	new appointment
 	update appointment
 
-	get customers
+	get customersxxxxxxxxxxx
 	get appointments
 
 	reminder check
@@ -41,4 +40,4 @@ Errors localizexxxxxxxxxxxxxxxxxx
 	
 
 store datetimes
-hard code city, country
+hard code city, countryxxxxxxxxxxxxx
