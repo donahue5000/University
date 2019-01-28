@@ -5,8 +5,9 @@
         <group>
             <file>file:/C:/zap/ScheduleKeeper/src/schedulekeeper/util/DBConnect.java</file>
             <file>file:/C:/zap/ScheduleKeeper/src/schedulekeeper/view/AppointmentsController.java</file>
+            <file>file:/C:/zap/ScheduleKeeper/src/schedulekeeper/view/AppointmentNewController.java</file>
+            <file>file:/C:/zap/ScheduleKeeper/src/schedulekeeper/view/LoginController.java</file>
             <file>file:/C:/zap/ScheduleKeeper/src/schedulekeeper/model/Appointment.java</file>
-            <file>file:/C:/zap/ScheduleKeeper/src/schedulekeeper/view/CustomersController.java</file>
         </group>
     </open-files>
 </project-private>

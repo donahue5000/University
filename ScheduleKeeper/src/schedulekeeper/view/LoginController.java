@@ -41,6 +41,7 @@ public class LoginController implements Initializable {
         topLabel.setText(rb.getString("welcome"));
         usernameLabel.setText(rb.getString("username"));
         passwordLabel.setText(rb.getString("password"));
+        DBConnect.clearRecentAppointmentList();
     }
 
     @FXML
@@ -53,6 +54,7 @@ public class LoginController implements Initializable {
             return;
         }
         if (DBConnect.login(username, password)) {
+            
             Parent root = FXMLLoader.load(getClass().getResource("Menu.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);

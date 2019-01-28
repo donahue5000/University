@@ -46,6 +46,11 @@ public class Customer {
         this.countryId = new SimpleIntegerProperty(countryId);
         this.country = new SimpleStringProperty(country);
     }
+    
+    @Override
+    public String toString(){
+        return "ID:" + " " + getCustomerName();
+    }
 
     public final int getCustomerId() {
         return customerId.get();
