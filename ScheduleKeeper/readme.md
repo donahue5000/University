@@ -3,10 +3,14 @@
 
 JavaFX with FXML project  
 JDBC chattin it up with MySQL  
-
-
-
-
+  
+  
+  
+   
+   
+   
+  
+  
 Notes to grader:  
 
 login credentials:  
